@@ -437,8 +437,10 @@ session_info(#sslsocket{pid = {Listen,_}}) when is_port(Listen) ->
     {error, enotconn}.
 
 %%---------------------------------------------------------------
--spec versions() -> [{ssl_app, string()} | {supported, [tls_atom_version()]} |
-		     {available, [tls_atom_version()]}].
+-spec versions() -> [{ssl_app, string()} |
+                     {supported, [tls_atom_version()]} |
+		     {available, [tls_atom_version()]} |
+                     {couchbase_patches, [atom()]}].
 %%
 %% Description: Returns a list of relevant versions.
 %%--------------------------------------------------------------------
@@ -447,7 +449,10 @@ versions() ->
     SupportedVsns = [tls_record:protocol_version(Vsn) || Vsn <- Vsns],
     AvailableVsns = ?ALL_SUPPORTED_VERSIONS,
     %% TODO Add DTLS versions when supported
-    [{ssl_app, ?VSN}, {supported, SupportedVsns}, {available, AvailableVsns}].
+    [{ssl_app, ?VSN},
+     {supported, SupportedVsns},
+     {available, AvailableVsns},
+     {couchbase_patches, [tls_padding_check]}].
 
 
 %%---------------------------------------------------------------

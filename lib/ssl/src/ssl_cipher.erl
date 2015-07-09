@@ -1268,10 +1268,11 @@ generic_stream_cipher_from_bin(T, HashSz) ->
 
 %% For interoperability reasons we do not check the padding content in
 %% SSL 3.0 and TLS 1.0 as it is not strictly required and breaks
-%% interopability with for instance Google. 
+%% interopability with for instance Google.
+%%
+%% Couchbase: due to MB-15588 we always enable padding check for TLS 1.0
 is_correct_padding(#generic_block_cipher{padding_length = Len,
-					 padding = Padding}, {3, N})
-  when N == 0; N == 1 ->
+					 padding = Padding}, {3, 0}) ->
     Len == byte_size(Padding); 
 %% Padding must be check in TLS 1.1 and after  
 is_correct_padding(#generic_block_cipher{padding_length = Len,
