@@ -59,7 +59,7 @@
 %%% my_tracer is used in testsuites
 -define(trace(Event), (catch ?do_trace(Event))).
 -define(do_trace(Event),
-        case application:get_env(kernel, global_enable_tracing, true) of
+        case application:get_env(kernel, global_enable_tracing, false) of
             true ->
                 error_logger:info_msg("global_trace:~n~p", [Event]);
             _ ->
