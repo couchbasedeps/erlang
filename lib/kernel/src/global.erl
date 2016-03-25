@@ -57,7 +57,14 @@
 %%% In certain places in the server, calling io:format hangs everything,
 %%% so we'd better use erlang:display/1.
 %%% my_tracer is used in testsuites
--define(trace(_), ok).
+-define(trace(Event), (catch ?do_trace(Event))).
+-define(do_trace(Event),
+        case application:get_env(kernel, global_enable_tracing, true) of
+            true ->
+                error_logger:info_msg("global_trace:~n~p", [Event]);
+            _ ->
+                ok
+        end).
 
 %-define(trace(T), (catch my_tracer ! {node(), {line,?LINE}, T})).
 
