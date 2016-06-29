@@ -29,6 +29,7 @@
 #endif
 
 #include <ctype.h>
+#include <math.h>
 
 #define NO 0
 #define YES 1
@@ -130,6 +131,11 @@ main(int argc, char** argv)
     int cnt;
     int erl_args;
     char** argv0 = argv;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
     emulator = get_default_emulator(argv[0]);
 

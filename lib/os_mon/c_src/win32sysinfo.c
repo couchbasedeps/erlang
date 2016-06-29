@@ -76,6 +76,7 @@
 #include <fcntl.h>
 #include <windows.h>
 #include "winbase.h"
+#include <math.h>
 
 #define MEM_INFO 'm'
 #define DISK_INFO 'd'
@@ -301,6 +302,10 @@ message_loop()
 }
 
 int main(int argc, char ** argv){
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
     _setmode(0, _O_BINARY);
     _setmode(1, _O_BINARY);

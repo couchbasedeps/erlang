@@ -29,6 +29,7 @@
 #include <string.h>
 #include <windows.h>
 #include <assert.h>
+#include <math.h>
 
 char *progname;
 
@@ -601,6 +602,11 @@ int main(void)
     char	*cmdline;
 
     /* Make sure a logoff does not distrurb us. */
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
+
     SetConsoleCtrlHandler(LogoffHandlerRoutine, TRUE);
 	
     cmdline = GetCommandLine();

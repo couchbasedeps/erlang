@@ -52,6 +52,7 @@ make use of its code from here in order to be consistent. */
 #include <stdio.h>
 #include <string.h>
 #include <locale.h>
+#include <math.h>
 
 #include "pcre_internal.h"
 
@@ -71,6 +72,12 @@ FILE *f;
 int i = 1;
 const unsigned char *tables;
 const unsigned char *base_of_tables;
+
+/* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+_set_FMA3_enable (0);
+#endif
+
 
 /* By default, the default C locale is used rather than what the building user
 happens to have set. However, if the -L option is given, set the locale from

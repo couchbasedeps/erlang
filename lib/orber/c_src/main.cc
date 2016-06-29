@@ -21,9 +21,16 @@
 
 #include "InitialReference.hh"
 
+#include <math.h>
+
 main()
 {
   InitialReference ir;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
   cout << ir.stringified_ior("fingolfin", 4001) << "\n";
 

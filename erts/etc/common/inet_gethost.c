@@ -53,6 +53,7 @@
 #endif
 
 #include "erl_printf.h"
+#include <math.h>
 
 #ifdef WIN32
 
@@ -84,7 +85,7 @@
 #include <netdb.h>
 #include <errno.h>
 #include <signal.h>
-
+#
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #else
@@ -425,6 +426,11 @@ int main(int argc, char **argv)
     char **ap = argv + 1;
     int x;
     int disable_greedy = 0;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
     program_name = *argv;
     que_first = que_last = NULL;

@@ -36,6 +36,8 @@
 #include "elog_format.h"
 #include "elog_registry.h"
 
+#include <math.h>
+
 /*
  * A race condition in the event log notification and the 
  * event log reading results in us having to retry reading the
@@ -408,6 +410,11 @@ int main(int argc, char **argv){
   int ret;
   int x = 0;
   int retry = 0;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
   if(argc < 2){
     ident = DEFAULT_IDENT;

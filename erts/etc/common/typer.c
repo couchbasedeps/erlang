@@ -29,6 +29,7 @@
 #endif
 
 #include <ctype.h>
+#include <math.h>
 
 #define NO 0
 #define YES 1
@@ -106,6 +107,11 @@ main(int argc, char** argv)
     int eargc_base;		/* How many arguments in the base of eargv. */
     char* emulator;
     int need_shell = 0;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
     emulator = get_default_emulator(argv[0]);
 

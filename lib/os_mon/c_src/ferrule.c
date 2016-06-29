@@ -25,6 +25,7 @@
 #include 	<sys/stat.h>
 #include	<fcntl.h>
 #include	<sys/uio.h>
+#include  <math.h>
 
 	/* arguments */
 #define		OWNPATH		1
@@ -58,6 +59,11 @@ int	main(int argc, char *argv[])
     char	buf[BUFFER_SIZE], pipename[MAXPATH_SIZE], packet_size[2];
     struct	pollfd	fds[2];
     struct	stat	stat_buf;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
     
     /* enough arguments? */
     if(argc < NARG+1)

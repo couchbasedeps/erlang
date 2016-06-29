@@ -658,6 +658,11 @@ int main(int argc, const char **argv)
     int i;
     int (*do_func_ptr)(FILE *, const char*) = NULL;
 
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
+
     compute_crc();
     for (i = 1; i < argc; i++) {
 	if      (strcmp(argv[i], "-c") == 0)

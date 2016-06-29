@@ -29,6 +29,7 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include <math.h>
 
 static void print_last_error(char* message);
 
@@ -39,6 +40,11 @@ main()
   char sbuf[256];
   DWORD written;
   DWORD numChars;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
   in = GetStdHandle(STD_INPUT_HANDLE);
   out = CreateFile("CONOUT$", GENERIC_WRITE, 0, NULL, OPEN_EXISTING,

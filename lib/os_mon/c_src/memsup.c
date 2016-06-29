@@ -113,6 +113,8 @@
 #include <sys/sysinfo.h>
 #endif
 
+#include <math.h>
+
 /* commands */
 #include "memsup.h"
 
@@ -562,6 +564,11 @@ message_loop(int erlin_fd)
 int
 MAIN(int argc, char **argv)
 {
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
+
   program_name = argv[0];
   message_loop(ERLIN_FD);
   return 0;

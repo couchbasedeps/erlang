@@ -102,6 +102,7 @@
 #include <string.h>
 #include <time.h>
 #include <errno.h>
+#include <math.h>
 
 #if !defined(__WIN32__)
 #  include <sys/types.h>
@@ -281,6 +282,11 @@ static void get_arguments(int argc, char** argv) {
     int h;
     int w;
     unsigned long p;
+
+    /* MB-20036 log() crash on windows on some CPU's */
+#ifdef _WIN64
+    _set_FMA3_enable (0);
+#endif
 
     while (i < argc) {
 	switch (argv[i][0]) {
