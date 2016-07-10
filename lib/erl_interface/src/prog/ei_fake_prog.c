@@ -46,8 +46,6 @@
 /* An exception from using eidef.h, use config.h directly */
 #include "config.h"
 
-#include <math.h>
-
 #if defined(HAVE_GMP_H) && defined(HAVE_LIBGMP)
 #include <gmp.h>
 #endif /* HAVE_GMP_H && HAVE_LIBGMP */
@@ -99,12 +97,6 @@ int main(void)
   EI_ULONGLONG ulonglongx = 0;
 #endif
   erlang_char_encoding enc;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
 
   intx = erl_errno;
 

@@ -18,8 +18,6 @@
 #  include <stdlib.h>
 #endif
 
-#include <math.h>
-
 #if defined(VMS) || defined(RISCOS)
 #  define TESTFILE "foo-gz"
 #else
@@ -526,11 +524,6 @@ int main(argc, argv)
     uLong comprLen = 10000*sizeof(int); /* don't overflow on MSDOS */
     uLong uncomprLen = comprLen;
     static const char* myVersion = ZLIB_VERSION;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     if (zlibVersion()[0] != myVersion[0]) {
         fprintf(stderr, "incompatible zlib version\n");

@@ -25,7 +25,7 @@
 #include <limits.h>
 #include <dirent.h>
 #include <sys/cygwin.h>
-#include <math.h>
+
     
 
 #ifdef CCP_POSIX_TO_WIN_A
@@ -470,11 +470,6 @@ int main(int argc, char **argv)
     char *linktype = "";
     char *manifest = "";
     char *outputres = "";
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     save_args(argc,argv);
     //fprintf(stderr,"ld_wrap!\n");

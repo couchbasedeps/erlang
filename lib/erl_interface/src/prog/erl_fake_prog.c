@@ -42,7 +42,6 @@
 
 /* #include <netdb.h> now included by ei.h */
 #include "erl_interface.h"
-#inlude <math.h>
 
 #ifdef VXWORKS
 int erl_fake_prog_main(void)
@@ -70,11 +69,6 @@ int main(void)
   ErlConnect *erlconnectp = NULL;
   struct hostent *hostp = NULL;
   struct in_addr *inaddrp = NULL;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
   /* Converion to erl_interface format is in liberl_interface */
 

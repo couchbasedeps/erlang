@@ -77,7 +77,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 #include <string.h>
 #include <ctype.h>
@@ -156,11 +155,6 @@ int erl_call(int argc, char **argv)
     struct call_flags flags = {0}; /* Default 0 and NULL in all fields */
     char* progname = argv[0];
     ei_cnode ec;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     /* Get the command line options */
     while (i < argc) {

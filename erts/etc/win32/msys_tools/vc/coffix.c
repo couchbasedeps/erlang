@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#include <math.h>
 
 #include <windows.h>
 #include <winnt.h> /* Structure definitions for PE (COFF) */
@@ -50,11 +49,6 @@ int main(int argc, char **argv)
     int findex = 1;
     int edit = 0;
     int ret;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     progname = argv[0];
     if (argc == 1) {

@@ -25,7 +25,7 @@
 #include <limits.h>
 #include <dirent.h>
 #include <sys/cygwin.h>
-#include <math.h>
+
     
 
 #ifdef CCP_POSIX_TO_WIN_A
@@ -371,7 +371,7 @@ int handle_overlapped(HANDLE fd, OVERLAPPED *ovp, char *buffer,
 
     DEBUGF(("In handle_overlapped(%d,0x%08x,0x%08x,%d,%d), prefix = %s\n",
 	    fd,ovp,buffer,bufflen,get_old,prefix));
-    /* h\E4mta resultat av gamla f\F6rst */
+    /* hämta resultat av gamla först */
     if (get_old) {
 	res = GetOverlappedResult(fd,ovp,&read,TRUE);
 	DEBUGF(("read = %d, res = %d, GetLastError() = %d\n",read,res,GetLastError()));
@@ -548,11 +548,6 @@ int main(int argc, char **argv)
     int optimized_build = 0;
     int linking = 1;
     int retval;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     save_args(argc,argv);
     

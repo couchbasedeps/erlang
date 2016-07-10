@@ -21,17 +21,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include "erlsrv_global.h"
 #include "erlsrv_interactive.h"
 #include "erlsrv_service.h"
 
 int main(int argc, char **argv){
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
   if(argc > 1)
     return interactive_main(argc,argv);
   else

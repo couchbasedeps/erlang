@@ -21,15 +21,9 @@
 #endif
 #include "sys.h"
 #include "global.h"
-#include <math.h>
 
 void 
 main(int argc, char **argv)
 {
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
     erl_start(argc, argv);
 }

@@ -101,7 +101,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <math.h>
 
 #ifdef UNIX
 #include <unistd.h>
@@ -275,11 +274,6 @@ int main(void)
     _setmode(_fileno( stdin),  _O_BINARY);
 #endif
     
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
     msg = receive_erlang_port_msg();
 
     temp = strtok(msg, ";");

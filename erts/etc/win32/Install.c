@@ -24,7 +24,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include "init_file.h"
 
 int main(int argc, char **argv) 
@@ -52,11 +51,6 @@ int main(int argc, char **argv)
     char fromname[MAX_PATH];
     char toname[MAX_PATH];
     
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
 
     for (i = 1; i < argc; ++i) {
 	switch(argv[i][0]) {

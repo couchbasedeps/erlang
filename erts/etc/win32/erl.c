@@ -23,8 +23,6 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-
 #include "init_file.h"
 
 typedef int ErlexecFunction(int, char **, HANDLE, int); 
@@ -56,11 +54,6 @@ int main(int argc, char **argv)
   char *path = malloc(100);
   char *npath;
   int pathlen;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
   get_parameters();
 

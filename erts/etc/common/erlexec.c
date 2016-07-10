@@ -37,8 +37,6 @@
 #  include "init_file.h"
 #endif
 
-#include <math.h>
-
 #define NO 0
 #define YES 1
 #define DEFAULT_PROGNAME "erl"
@@ -414,12 +412,6 @@ int main(int argc, char **argv)
     int print_qouted_cmd_exit = 0;
     erts_cpu_info_t *cpuinfo = NULL;
     char* emu_name;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
 
 #ifdef __WIN32__
     this_module_handle = module;

@@ -22,7 +22,7 @@
 #include 	<sys/types.h>
 #include 	<sys/stat.h>
 #include 	<signal.h>
-#include <math.h>
+
 	/* arguments */
 #define		MODE		1
 #define		OWNPATH		2
@@ -57,11 +57,6 @@ int	main(int argc, char *argv[])
     
     void	make_exit(int);
     
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
     /* enough arguments? */
     if(argc < NARG+1)
 	make_exit(ARG_ERROR);

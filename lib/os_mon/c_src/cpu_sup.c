@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 #if defined(__sun__)
 #include <kstat.h>
@@ -146,11 +145,6 @@ int main(int argc, char** argv) {
   unsigned int *rv;
 #if defined(__linux__)
   unsigned int no_of_cpus = 0;
-#endif
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
 #endif
 
 #if defined(__sun__)

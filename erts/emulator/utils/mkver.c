@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <time.h>
-#include <math.h>
 
 int
 main(argc, argv)
@@ -37,11 +36,6 @@ char** argv;
     FILE *file;
     time_t now;
     char *cnow;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     if (argc != 2) {
 	fprintf(stderr, "usage: mkver version\n");

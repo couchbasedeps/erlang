@@ -29,7 +29,6 @@
 #endif
 
 #include <ctype.h>
-#include <math.h>
 
 static int debug = 0;		/* Bit flags for debug printouts. */
 
@@ -334,11 +333,6 @@ main(int argc, char** argv)
     char scriptname[PMAX];
     char** last_opt;
     char** first_opt;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     emulator = env = get_env("ESCRIPT_EMULATOR");
     if (emulator == NULL) {

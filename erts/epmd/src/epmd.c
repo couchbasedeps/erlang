@@ -29,8 +29,6 @@
 #  include <stdlib.h>
 #endif
 
-#include <math.h>
-
 /* forward declarations */
 
 static void usage(EpmdVars *);
@@ -153,13 +151,6 @@ int main(int argc, char** argv)
     	epmd_cleanup_exit(g,1);
     }
 #endif
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
-
-
 #ifdef DONT_USE_MAIN
     if(free_argv)
 	g->argv = argv;

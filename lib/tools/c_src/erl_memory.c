@@ -48,7 +48,6 @@ typedef int socklen_t;
 #include <stdlib.h>
 #include <limits.h>
 #include <string.h>
-#include <math.h>
 
 #include "erl_fixed_size_int_types.h"
 #include "erl_memory_trace_parser.h"
@@ -2762,11 +2761,6 @@ main(int argc, char *argv[])
     ethr_tid input_tid;
     ethr_tid output_tid;
     em_state *state;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     /* set stdout in unbuffered mode */
     if (setvbuf(stdout, NULL, _IONBF, 0) != 0) {

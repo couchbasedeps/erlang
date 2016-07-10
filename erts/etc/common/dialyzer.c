@@ -29,7 +29,6 @@
 #endif
 
 #include <ctype.h>
-#include <math.h>
 
 #define NO 0
 #define YES 1
@@ -144,11 +143,6 @@ main(int argc, char** argv)
     char *env;
     int i;
     int need_shell = 0;
-
-    /* MB-20036 log() crash on windows on some CPU's */
-#ifdef _WIN64
-    _set_FMA3_enable (0);
-#endif
 
     env = get_env("DIALYZER_EMULATOR");
     emulator = env ? env : get_default_emulator(argv[0]);
