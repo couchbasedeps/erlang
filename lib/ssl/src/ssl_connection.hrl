@@ -54,6 +54,7 @@
 	  session_cache         :: db_handle(),
 	  session_cache_cb      :: atom(),
           negotiated_version    :: tls_version(),
+          client_hello_version,
           client_certificate_requested = false :: boolean(),
 	  key_algorithm         :: key_algo(),
 	  hashsign_algorithm = {undefined, undefined},
