@@ -86,7 +86,11 @@ listen(Name) ->
 
 gen_listen(Driver, Name, Host) ->
     ErlEpmd = net_kernel:epmd_module(),
-    case gen_listen(ErlEpmd, Name, Host, Driver, [{active, false}, {packet,2}, {reuseaddr, true}]) of
+    OnlyIPV6 = case Driver:family() of
+                   inet -> [];
+                   inet6 -> [{ipv6_v6only, true}]
+               end,
+    case gen_listen(ErlEpmd, Name, Host, Driver, [{active, false}, {packet,2}, {reuseaddr, true} | OnlyIPV6]) of
 	{ok, Socket} ->
 	    TcpAddress = get_tcp_address(Driver, Socket),
 	    {_,Port} = TcpAddress#net_address.address,
