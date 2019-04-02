@@ -181,9 +181,9 @@ fam_listen(Family, Name, Host, ListenFun) ->
             of
                 {ok, 0} ->
                     {First,Last} = get_port_range(),
-                    ListenFun(First, Last, listen_options());
+                    ListenFun(First, Last, listen_options(Family));
                 {ok, PortNum} ->
-                    ListenFun(PortNum, PortNum, listen_options())
+                    ListenFun(PortNum, PortNum, listen_options(Family))
             end,
         {ok, {_IP,Port} = Address} = inet:sockname(ListenSocket),
         %%
@@ -206,8 +206,12 @@ get_port_range() ->
     end.
 
 
-listen_options() ->
-    DefaultOpts = [{reuseaddr, true}, {backlog, 128}],
+listen_options(Family) ->
+    OnlyIPV6 = case Family of
+                   inet -> [];
+                   inet6 -> [{ipv6_v6only, true}]
+               end,
+    DefaultOpts = [{reuseaddr, true}, {backlog, 128} | OnlyIPV6],
     ForcedOpts =
         case application:get_env(kernel, inet_dist_use_interface) of
             {ok, Ip}  -> [{ip, Ip}];
