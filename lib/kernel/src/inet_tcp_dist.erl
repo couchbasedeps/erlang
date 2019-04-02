@@ -101,7 +101,7 @@ gen_listen(Driver, Name, Host) ->
     end.
 
 gen_listen(ErlEpmd, Name, Host, Driver) ->
-    ListenOptions = listen_options(),
+    ListenOptions = listen_options(Driver),
     case call_epmd_function(ErlEpmd, listen_port_please, [Name, Host]) of
         {ok, 0} ->
             {First,Last} = get_port_range(),
@@ -133,8 +133,12 @@ do_listen(Driver, First,Last,Options) ->
 	    Other
     end.
 
-listen_options() ->
-    DefaultOpts = [{reuseaddr, true}, {backlog, 128}],
+listen_options(Driver) ->
+    OnlyIPV6 = case Driver:family() of
+                   inet -> [];
+                   inet6 -> [{ipv6_v6only, true}]
+               end,
+    DefaultOpts = [{reuseaddr, true}, {backlog, 128} | OnlyIPV6],
     ForcedOpts =
         [{active, false}, {packet,2} |
          case application:get_env(kernel, inet_dist_use_interface) of
