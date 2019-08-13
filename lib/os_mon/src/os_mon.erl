@@ -113,7 +113,7 @@ stop(_) ->
 init([]) ->
     SupFlags = case os:type() of
 		   {win32, _} ->
-		       {one_for_one, 5, 3600};
+		       {one_for_one, 8, 5};
 		   _ ->
 		       {one_for_one, 4, 3600}
 	       end,
