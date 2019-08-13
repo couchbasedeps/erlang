@@ -126,5 +126,5 @@ get_data(Port, Sofar) ->
 	{'EXIT', Port, Reason} ->
 	    exit({port_died, Reason})
     after 5000 ->
-	    lists:reverse(Sofar)
+	    exit({port_error, timeout})
     end.
