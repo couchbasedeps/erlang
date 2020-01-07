@@ -2809,8 +2809,10 @@ verify_hostname_match_default0(FQDN=[_|_], {cn,FQDN}) ->
     not lists:member($*, FQDN);
 verify_hostname_match_default0(FQDN=[_|_], {cn,Name=[_|_]}) -> 
     verify_hostname_match_wildcard(FQDN, Name);
-verify_hostname_match_default0({dns_id,R}, {dNSName,P}) ->
-    R==P;
+verify_hostname_match_default0({dns_id,FQDN=[_|_]}, {dNSName,FQDN}) ->
+    not lists:member($*, FQDN);
+verify_hostname_match_default0({dns_id,FQDN=[_|_]}, {dNSName,Name=[_|_]}) ->
+    verify_hostname_match_wildcard(FQDN, Name);
 verify_hostname_match_default0({uri_id,R}, {uniformResourceIdentifier,P}) ->
     R==P;
 verify_hostname_match_default0({ip,R}, {iPAddress,P}) when length(P) == 4 ->
