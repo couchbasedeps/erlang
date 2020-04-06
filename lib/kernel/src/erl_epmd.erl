@@ -81,12 +81,11 @@ stop() ->
 %% return {port, P, Version} | noport
 %%
 
--spec port_please(Name, Host) -> {ok, Port, Version} | noport | closed | {error, term()} when
+-spec port_please(Name, Host) -> {port, Port, Version} | noport | closed | {error, term()} when
 	  Name :: atom() | string(),
 	  Host :: atom() | string() | inet:ip_address(),
 	  Port :: non_neg_integer(),
 	  Version :: non_neg_integer().
-
 port_please(Node, Host) ->
   port_please(Node, Host, infinity).
 
@@ -96,7 +95,6 @@ port_please(Node, Host) ->
 	  Timeout :: non_neg_integer() | infinity,
 	  Port :: non_neg_integer(),
 	  Version :: non_neg_integer().
-
 port_please(Node, HostName, Timeout) ->
     case listen_port_please(Node, HostName) of
         {ok, 0} ->
