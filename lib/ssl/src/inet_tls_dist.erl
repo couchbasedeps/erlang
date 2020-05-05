@@ -630,7 +630,7 @@ do_setup(
     Timer = trace(dist_util:start_timer(SetupTime)),
     ParseAddress = fun (A) -> inet:parse_strict_address(A, Family) end,
     {#net_address{
-        host = Host,
+        host = _Host,
         address = {Ip, PortNum}},
      ConnectOptions,
      Version} =
@@ -643,7 +643,7 @@ do_setup(
             get_ssl_options(client)),
           [Family, binary, {active, false}, {packet, 4},
            {read_ahead, false}, {nodelay, true}],
-          [{server_name_indication, Host}]),
+          []),
     KTLS = proplists:get_value(ktls, Opts, false),
     dist_util:reset_timer(Timer),
     maybe
