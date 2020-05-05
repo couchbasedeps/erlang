@@ -581,11 +581,15 @@ do_setup(Driver, Kernel, Node, Type, MyNode, LongOrShortNames, SetupTime) ->
 -spec do_setup_connect(_,_,_,_,_,_,_,_,_,_) -> no_return().
 
 do_setup_connect(Driver, Kernel, Node, Address, Ip, TcpPort, Version, Type, MyNode, Timer) ->
-    Opts =  trace(connect_options(get_ssl_options(client))),
+    Opts0 =  trace(connect_options(get_ssl_options(client))),
     dist_util:reset_timer(Timer),
+    Opts = case inet:parse_address(Address) of
+               {ok, _} -> Opts0;
+               _ -> [{server_name_indication, Address} | Opts0]
+           end,
     case ssl:connect(
         Ip, TcpPort,
-        [binary, {active, false}, {packet, 4}, {server_name_indication, Address},
+        [binary, {active, false}, {packet, 4},
             Driver:family(), {nodelay, true}] ++ Opts,
         net_kernel:connecttime()) of
     {ok, #sslsocket{pid = [_, DistCtrl| _]} = SslSocket} ->
