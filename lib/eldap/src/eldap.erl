@@ -11,7 +11,7 @@
 %%% --------------------------------------------------------------------
 -vc('$Id$ ').
 -export([open/1, open/2,
-	 simple_bind/3, simple_bind/4,
+	 simple_bind/3, simple_bind/4, sasl_external_bind/1,
 	 controlling_process/2,
 	 start_tls/2, start_tls/3, start_tls/4,
          modify_password/3, modify_password/4, modify_password/5,
@@ -176,6 +176,10 @@ simple_bind(Handle, Dn, Passwd) when is_pid(Handle)  ->
 
 simple_bind(Handle, Dn, Passwd, Controls) when is_pid(Handle)  ->
     send(Handle, {simple_bind, Dn, Passwd, Controls}),
+    recv(Handle).
+
+sasl_external_bind(Handle) ->
+    send(Handle, {sasl_external_bind, asn1_NOVALUE}),
     recv(Handle).
 
 %%% --------------------------------------------------------------------
@@ -560,6 +564,11 @@ loop(Cpid, Data) ->
 	    send(From,Res),
 	    ?MODULE:loop(Cpid, NewData);
 
+        {From, {sasl_external_bind, Controls}} ->
+            {Res, NewData} = do_sasl_external_bind(Data, Controls),
+            send(From, Res),
+            ?MODULE:loop(Cpid, NewData);
+
 	{From, {cnt_proc, NewCpid}} ->
 	    unlink(Cpid),
 	    send(From,ok),
@@ -687,6 +696,43 @@ exec_extended_req_reply(_, Error) ->
 %%% --------------------------------------------------------------------
 %%% bindRequest
 %%% --------------------------------------------------------------------
+
+do_sasl_external_bind(Data, Controls) ->
+    case catch exec_sasl_external_bind(Data#eldap{id = bump_id(Data)},
+                                       Controls) of
+        {ok, NewData} -> {ok, NewData};
+        {{ok, Val}, NewData} -> {{ok, Val}, NewData};
+        {error, Emsg} -> {{error, Emsg}, Data};
+        Else -> {{error,Else},Data}
+    end.
+
+exec_sasl_external_bind(Data, Controls) ->
+    Creds = #'SaslCredentials'{mechanism = "EXTERNAL", credentials = ""},
+    Req = #'BindRequest'{version = Data#eldap.version,
+                         name = Data#eldap.binddn,
+                         authentication = {sasl, Creds}},
+    log2(Data, "bind request = ~p~n", [Req]),
+    Reply = request(Data#eldap.fd, Data, Data#eldap.id,
+                    {bindRequest, Req, Controls}),
+    log2(Data, "bind reply = ~p~n", [Reply]),
+    exec_sasl_external_bind_reply(Data, Reply).
+
+exec_sasl_external_bind_reply(Data, {ok, Msg}) when
+                            Msg#'LDAPMessage'.messageID == Data#eldap.id ->
+    case Msg#'LDAPMessage'.protocolOp of
+        {bindResponse, Result} ->
+            case Result#'BindResponse'.resultCode of
+                success ->
+                    {ok, Data};
+                referral ->
+                    {{ok, {referral,Result#'BindResponse'.referral}}, Data};
+                Error  ->
+                    {error, Error}
+            end;
+        Other -> {error, Other}
+    end;
+exec_sasl_external_bind_reply(_, Error) ->
+    {error, Error}.
 
 %%% Authenticate ourselves to the directory using
 %%% simple authentication.
