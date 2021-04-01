@@ -251,9 +251,15 @@ accept_loop(Driver, Listen, Kernel, Socket) ->
                    Driver:family(), tls}),
             receive
                 {Kernel, controller, Pid} ->
-                    ok = ssl:controlling_process(SslSocket, Pid),
-                    trace(
-                      Pid ! {self(), controller});
+                    case ssl:controlling_process(SslSocket, Pid) of
+                        ok ->
+                            trace(Pid ! {self(), controller});
+                        Error ->
+                            trace(Pid ! {self(), exit}),
+                            ?LOG_ERROR(
+                              "Cannot control TLS distribution connection: ~p~n",
+                              [Error])
+                    end;
                 {Kernel, unsupported_protocol} ->
                     exit(trace(unsupported_protocol))
             end,
@@ -419,7 +425,11 @@ do_accept(
                   this_flags = 0,
                   allowed = NewAllowed},
             link(DistCtrl),
-            dist_util:handshake_other_started(trace(HSData))
+            dist_util:handshake_other_started(trace(HSData));
+        {AcceptPid, exit} ->
+            %% this can happen when connection was initiated, but dropped
+            %%  between TLS handshake completion and dist handshake start
+            ?shutdown2(MyNode, connection_setup_failed)
     end.
 
 allowed_nodes(_SslSocket, []) ->
