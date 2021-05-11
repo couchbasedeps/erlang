@@ -695,7 +695,7 @@ print_length_list1(Term, D, T, RF, Enc, Str) when D =:= 1; T =:= 0->
     More = fun(T1, Dd) -> ?FUNCTION_NAME(Term, D+Dd, T1, RF, Enc, Str) end,
     {dots, 3, 3, More};
 print_length_list1([E | Es], D, T, RF, Enc, Str) ->
-    {_, Len1, _, _} = Elem1 = print_length(E, D - 1, tsub(T, 1), RF, Enc, Str),
+    {_, Len1, _, _} = Elem1 = print_length(E, D - 1, T, RF, Enc, Str),
     [Elem1 | print_length_list1(Es, D - 1, tsub(T, Len1 + 1), RF, Enc, Str)];
 print_length_list1(E, D, T, RF, Enc, Str) ->
     print_length(E, D - 1, T, RF, Enc, Str).
