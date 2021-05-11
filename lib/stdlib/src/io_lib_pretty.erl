@@ -612,7 +612,7 @@ print_length_map_pairs(Term, D, D0, T, RF, Enc, Str) when D =:= 1; T =:= 0->
            end,
     {dots, 3, 3, More};
 print_length_map_pairs({K, V, Iter}, D, D0, T, RF, Enc, Str) ->
-    Pair1 = print_length_map_pair(K, V, D0, tsub(T, 1), RF, Enc, Str),
+    Pair1 = print_length_map_pair(K, V, D0, T, RF, Enc, Str),
     {_, Len1, _, _} = Pair1,
     Next = maps:next(Iter),
     [Pair1 |
@@ -641,9 +641,8 @@ print_length_tuple1(Tuple, I, D, T, RF, Enc, Str) when D =:= 1; T =:= 0->
     {dots, 3, 3, More};
 print_length_tuple1(Tuple, I, D, T, RF, Enc, Str) ->
     E = element(I, Tuple),
-    T1 = tsub(T, 1),
-    {_, Len1, _, _} = Elem1 = print_length(E, D - 1, T1, RF, Enc, Str),
-    T2 = tsub(T1, Len1),
+    {_, Len1, _, _} = Elem1 = print_length(E, D - 1, T, RF, Enc, Str),
+    T2 = tsub(T, Len1+1),
     [Elem1 | print_length_tuple1(Tuple, I + 1, D - 1, T2, RF, Enc, Str)].
 
 print_length_record(Tuple, 1, _T, RF, RDefs, Enc, Str) ->
@@ -695,7 +694,7 @@ print_length_list1(Term, D, T, RF, Enc, Str) when D =:= 1; T =:= 0->
     More = fun(T1, Dd) -> ?FUNCTION_NAME(Term, D+Dd, T1, RF, Enc, Str) end,
     {dots, 3, 3, More};
 print_length_list1([E | Es], D, T, RF, Enc, Str) ->
-    {_, Len1, _, _} = Elem1 = print_length(E, D - 1, tsub(T, 1), RF, Enc, Str),
+    {_, Len1, _, _} = Elem1 = print_length(E, D - 1, T, RF, Enc, Str),
     [Elem1 | print_length_list1(Es, D - 1, tsub(T, Len1 + 1), RF, Enc, Str)];
 print_length_list1(E, D, T, RF, Enc, Str) ->
     print_length(E, D - 1, T, RF, Enc, Str).
@@ -926,7 +925,7 @@ expand_list(Ifs, T, Dd, L0) ->
 expand_list([], _T, _Dd) ->
     [];
 expand_list([If | Ifs], T, Dd) ->
-    {_, Len1, _, _} = Elem1 = expand(If, tsub(T, 1), Dd),
+    {_, Len1, _, _} = Elem1 = expand(If, T, Dd),
     [Elem1 | expand_list(Ifs, tsub(T, Len1 + 1), Dd)];
 expand_list({_, _, _, More}, T, Dd) ->
     More(T, Dd).
