@@ -1,8 +1,8 @@
 %%
 %% %CopyrightBegin%
-%% 
+%%
 %% Copyright Ericsson AB 1999-2019. All Rights Reserved.
-%% 
+%%
 %% Licensed under the Apache License, Version 2.0 (the "License");
 %% you may not use this file except in compliance with the License.
 %% You may obtain a copy of the License at
@@ -14,27 +14,26 @@
 %% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 %% See the License for the specific language governing permissions and
 %% limitations under the License.
-%% 
+%%
 %% %CopyrightEnd%
 %%
 -module(io_SUITE).
 
 -export([all/0, suite/0]).
 
--export([error_1/1, float_g/1, otp_5403/1, otp_5813/1, otp_6230/1, 
+-export([error_1/1, float_g/1, otp_5403/1, otp_5813/1, otp_6230/1,
          otp_6282/1, otp_6354/1, otp_6495/1, otp_6517/1, otp_6502/1,
          manpage/1, otp_6708/1, otp_7084/0, otp_7084/1, otp_7421/1,
-	 io_lib_collect_line_3_wb/1, cr_whitespace_in_string/1,
-	 io_fread_newlines/1, otp_8989/1, io_lib_fread_literal/1,
-	 printable_range/1, bad_printable_range/1,
-	 io_lib_print_binary_depth_one/1, otp_10302/1, otp_10755/1,
+   io_lib_collect_line_3_wb/1, cr_whitespace_in_string/1,
+   io_fread_newlines/1, otp_8989/1, io_lib_fread_literal/1,
+   printable_range/1, bad_printable_range/1,
+   io_lib_print_binary_depth_one/1, otp_10302/1, otp_10755/1,
          otp_10836/1, io_lib_width_too_small/1,
          io_with_huge_message_queue/1, format_string/1,
-	 maps/1, coverage/1, otp_14178_unicode_atoms/1, otp_14175/1,
+   maps/1, coverage/1, otp_14178_unicode_atoms/1, otp_14175/1,
          otp_14285/1, limit_term/1, otp_14983/1, otp_15103/1, otp_15076/1,
          otp_15159/1, otp_15639/1, otp_15705/1, otp_15847/1, otp_15875/1,
          chars_limit/1, otp_17525/1]).
-
 -export([pretty/2, trf/3]).
 
 %%-define(debug, true).
@@ -55,7 +54,7 @@ suite() ->
     [{ct_hooks,[ts_install_cth]},
      {timetrap,{minutes,1}}].
 
-all() -> 
+all() ->
     [error_1, float_g, otp_5403, otp_5813, otp_6230,
      otp_6282, otp_6354, otp_6495, otp_6517, otp_6502,
      manpage, otp_6708, otp_7084, otp_7421,
@@ -136,16 +135,16 @@ float_g(Config) when is_list(Config) ->
      "5.0e+5"] = float_g_1("~.2g", 5.0, -2, 5),
 
     case catch fmt("~.1g", [0.5]) of
-	"0.5" ->
-	    ["5.0e-2",
-	     "0.5",
-	     "5.0e+0",
-	     "5.0e+1",
-	     "5.0e+2",
-	     "5.0e+3",
-	     "5.0e+4",
-	     "5.0e+5"] = float_g_1("~.1g", 5.0, -2, 5);
-	{'EXIT',_} -> ok
+  "0.5" ->
+      ["5.0e-2",
+       "0.5",
+       "5.0e+0",
+       "5.0e+1",
+       "5.0e+2",
+       "5.0e+3",
+       "5.0e+4",
+       "5.0e+5"] = float_g_1("~.1g", 5.0, -2, 5);
+  {'EXIT',_} -> ok
     end,
 
     ["4.99999e-2",
@@ -293,24 +292,24 @@ otp_6354(Config) when is_list(Config) ->
     "{1,{1,{2,3}}}" = p({1,{1,{2,3}}}, 1, 80, 100),
 
     bt(<<"{wwwww,{wwwww,{wwwww,{wwwww,{wwwww,lkjsldfj,klsdjfjklds,\n"
-	 "                                   sdkfjdsl,sdakfjdsklj,sdkljfsdj}}}}}">>,
+   "                                   sdkfjdsl,sdakfjdsklj,sdkljfsdj}}}}}">>,
        p({wwwww,{wwwww,{wwwww,{wwwww,{wwwww,lkjsldfj,klsdjfjklds,
-				      sdkfjdsl,sdakfjdsklj,sdkljfsdj}}}}}, -1)),
+              sdkfjdsl,sdakfjdsklj,sdkljfsdj}}}}}, -1)),
 
     bt(<<"{wwwww,\n"
-	 "    {wwwww,\n"
-	 "        {wwwww,\n"
-	 "            {wwwww,\n"
-	 "                {wwwww,\n"
-	 "                    {lkjsldfj,\n"
-	 "                        {klsdjfjklds,\n"
-	 "                            {klajsljls,\n"
-	 "                                #aaaaaaaaaaaaaaaaaaaaa"
-	 "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa{}}}}}}}}}">>,
+   "    {wwwww,\n"
+   "        {wwwww,\n"
+   "            {wwwww,\n"
+   "                {wwwww,\n"
+   "                    {lkjsldfj,\n"
+   "                        {klsdjfjklds,\n"
+   "                            {klajsljls,\n"
+   "                                #aaaaaaaaaaaaaaaaaaaaa"
+   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa{}}}}}}}}}">>,
        p({wwwww,{wwwww,{wwwww,{wwwww,{wwwww,{lkjsldfj,
-					     {klsdjfjklds,{klajsljls,
-							   {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}}}}}}}}},
-	 -1)),
+               {klsdjfjklds,{klajsljls,
+                 {aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa}}}}}}}}},
+   -1)),
     "{{...},...}" = p({{a,b},{a,b,c},{d,e,f}},1,8,2),
     %% Closing brackets and parentheses count:
     "{{a,b,c},\n {{1,2,\n   3}}}" = p({{a,b,c},{{1,2,3}}},1,11,-1),
@@ -398,8 +397,8 @@ otp_6354(Config) when is_list(Config) ->
     "#c{f1 = d,f2 = e}" = p({c,d,e}, 4),
     %% -record(d, {a..., b..., c.., d...}).
     bt(<<"#d{aaaaaaaaaaaaaaaaaaaa = 1,bbbbbbbbbbbbbbbbbbbb = 2,\n"
-	 "   cccccccccccccccccccc = 3,dddddddddddddddddddd = 4,\n"
-	 "   eeeeeeeeeeeeeeeeeeee = 5}">>,
+   "   cccccccccccccccccccc = 3,dddddddddddddddddddd = 4,\n"
+   "   eeeeeeeeeeeeeeeeeeee = 5}">>,
        p({d,1,2,3,4,5}, -1)),
     "..." = p({d,1,2,3,4,5}, 0),
     "{...}" = p({d,1,2,3,4,5}, 1),
@@ -408,190 +407,190 @@ otp_6354(Config) when is_list(Config) ->
     bt(<<"#d{aaaaaaaaaaaaaaaaaaaa = 1,bbbbbbbbbbbbbbbbbbbb = 2,...}">>,
        p({d,1,2,3,4,5}, 4)),
     bt(<<"#d{aaaaaaaaaaaaaaaaaaaa = 1,bbbbbbbbbbbbbbbbbbbb = 2,\n"
-	 "   cccccccccccccccccccc = 3,...}">>,
+   "   cccccccccccccccccccc = 3,...}">>,
        p({d,1,2,3,4,5}, 5)), % longer than 80 characters...
     bt(<<"#d{aaaaaaaaaaaaaaaaaaaa = 1,bbbbbbbbbbbbbbbbbbbb = 2,\n"
-	 "   cccccccccccccccccccc = 3,dddddddddddddddddddd = 4,...}">>,
+   "   cccccccccccccccccccc = 3,dddddddddddddddddddd = 4,...}">>,
        p({d,1,2,3,4,5}, 6)),
     bt(<<"#d{aaaaaaaaaaaaaaaaaaaa = 1,bbbbbbbbbbbbbbbbbbbb = 2,\n"
-	 "   cccccccccccccccccccc = 3,dddddddddddddddddddd = 4,\n"
-	 "   eeeeeeeeeeeeeeeeeeee = 5}">>,
+   "   cccccccccccccccccccc = 3,dddddddddddddddddddd = 4,\n"
+   "   eeeeeeeeeeeeeeeeeeee = 5}">>,
        p({d,1,2,3,4,5}, 7)),
     bt(<<"#rrrrr{\n"
-	 "    f1 = 1,\n"
-	 "    f2 = #rrrrr{f1 = a,f2 = b,f3 = c},\n"
-	 "    f3 =\n"
-	 "        #rrrrr{\n"
-	 "            f1 = h,f2 = i,\n"
-	 "            f3 =\n"
-	 "                #rrrrr{\n"
-	 "                    f1 = aa,\n"
-	 "                    f2 =\n"
-	 "                        #rrrrr{\n"
-	 "                            f1 = #rrrrr{f1 = a,f2 = b,f3 = c},\n"
-	 "                            f2 = 2,f3 = 3},\n"
-	 "                    f3 = bb}}}">>,
+   "    f1 = 1,\n"
+   "    f2 = #rrrrr{f1 = a,f2 = b,f3 = c},\n"
+   "    f3 =\n"
+   "        #rrrrr{\n"
+   "            f1 = h,f2 = i,\n"
+   "            f3 =\n"
+   "                #rrrrr{\n"
+   "                    f1 = aa,\n"
+   "                    f2 =\n"
+   "                        #rrrrr{\n"
+   "                            f1 = #rrrrr{f1 = a,f2 = b,f3 = c},\n"
+   "                            f2 = 2,f3 = 3},\n"
+   "                    f3 = bb}}}">>,
        p({rrrrr,1,{rrrrr,a,b,c},{rrrrr,h,i,
-				 {rrrrr,aa,{rrrrr,{rrrrr,a,b,c},
-					    2,3},bb}}},
-	 -1)),
+         {rrrrr,aa,{rrrrr,{rrrrr,a,b,c},
+              2,3},bb}}},
+   -1)),
     bt(<<"#d{aaaaaaaaaaaaaaaaaaaa = 1,\n"
-	 "   bbbbbbbbbbbbbbbbbbbb =\n"
-	 "       #d{aaaaaaaaaaaaaaaaaaaa = a,bbbbbbbbbbbbbbbbbbbb = b,\n"
-	 "          cccccccccccccccccccc = c,dddddddddddddddddddd = d,\n"
-	 "          eeeeeeeeeeeeeeeeeeee = e},\n"
-	 "   cccccccccccccccccccc = 3,\n"
-	 "   dddddddddddddddddddd =\n"
-	 "       #d{aaaaaaaaaaaaaaaaaaaa = h,bbbbbbbbbbbbbbbbbbbb = i,\n"
-	 "          cccccccccccccccccccc =\n"
-	 "              #d{aaaaaaaaaaaaaaaaaaaa = aa,"
-	 "bbbbbbbbbbbbbbbbbbbb = bb,\n"
-	 "                 cccccccccccccccccccc =\n"
-	 "                     #d{aaaaaaaaaaaaaaaaaaaa = 1,"
-	 "bbbbbbbbbbbbbbbbbbbb = 2,\n"
-	 "                        cccccccccccccccccccc = 3,"
-	 "dddddddddddddddddddd = 4,\n"
-	 "                        eeeeeeeeeeeeeeeeeeee = 5},\n"
-	 "                 dddddddddddddddddddd = dd,"
-	 "eeeeeeeeeeeeeeeeeeee = ee},\n"
-	 "          dddddddddddddddddddd = k,"
-	 "eeeeeeeeeeeeeeeeeeee = l},\n"
-	 "   eeeeeeeeeeeeeeeeeeee = 5}">>,
+   "   bbbbbbbbbbbbbbbbbbbb =\n"
+   "       #d{aaaaaaaaaaaaaaaaaaaa = a,bbbbbbbbbbbbbbbbbbbb = b,\n"
+   "          cccccccccccccccccccc = c,dddddddddddddddddddd = d,\n"
+   "          eeeeeeeeeeeeeeeeeeee = e},\n"
+   "   cccccccccccccccccccc = 3,\n"
+   "   dddddddddddddddddddd =\n"
+   "       #d{aaaaaaaaaaaaaaaaaaaa = h,bbbbbbbbbbbbbbbbbbbb = i,\n"
+   "          cccccccccccccccccccc =\n"
+   "              #d{aaaaaaaaaaaaaaaaaaaa = aa,"
+   "bbbbbbbbbbbbbbbbbbbb = bb,\n"
+   "                 cccccccccccccccccccc =\n"
+   "                     #d{aaaaaaaaaaaaaaaaaaaa = 1,"
+   "bbbbbbbbbbbbbbbbbbbb = 2,\n"
+   "                        cccccccccccccccccccc = 3,"
+   "dddddddddddddddddddd = 4,\n"
+   "                        eeeeeeeeeeeeeeeeeeee = 5},\n"
+   "                 dddddddddddddddddddd = dd,"
+   "eeeeeeeeeeeeeeeeeeee = ee},\n"
+   "          dddddddddddddddddddd = k,"
+   "eeeeeeeeeeeeeeeeeeee = l},\n"
+   "   eeeeeeeeeeeeeeeeeeee = 5}">>,
        p({d,1,{d,a,b,c,d,e},3,{d,h,i,{d,aa,bb,{d,1,2,3,4,5},dd,ee},
-			       k,l},5}, -1)),
+             k,l},5}, -1)),
 
     A = aaaaaaaaaaaaa,
     %% Print the record with dots at the end of the line (Ll = 80).
     "{aaaaaaa" ++ _ =
-	p({A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
-								       {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
-																 {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
-																							   {A,{A,{ggg,{hhh,{ii,{jj,{kk,{ll,{mm,{nn,{oo,{d,1,2,3,4,5}
-																												   }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
-						       }}}}}}}}}}}}}}}}, 146),
+  p({A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
+                       {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
+                                 {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
+                                                 {A,{A,{ggg,{hhh,{ii,{jj,{kk,{ll,{mm,{nn,{oo,{d,1,2,3,4,5}
+                                                           }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+                   }}}}}}}}}}}}}}}}, 146),
     "{aaaaaaa" ++ _ =
-	p({A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
-								       {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
-																 {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
-																							   {A,{A,{A,{A,{A,{ggg,{hhh,{ii,{jj,{kk,{ll,{mm,{nn,{oo,{a}
-																													    }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
-								}}}}}}}}}}}}}}}}}}}, 152),
+  p({A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
+                       {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
+                                 {A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{A,
+                                                 {A,{A,{A,{A,{A,{ggg,{hhh,{ii,{jj,{kk,{ll,{mm,{nn,{oo,{a}
+                                                              }}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
+                }}}}}}}}}}}}}}}}}}}, 152),
 
     bt(<<"{aaaaaaaaaaaaa,\n"
-	 "    {aaaaaaaaaaaaa,\n"
-	 "        {aaaaaaaaaaaaa,\n"
-	 "            {aaaaaaaaaaaaa,\n"
-	 "                {aaaaaaaaaaaaa,\n"
-	 "                    {aaaaaaaaaaaaa,\n"
-	 "                        {g,{h,{i,{j,{k,{l,{m,{n,{o,#"
-	 "d{...}}}}}}}}}}}}}}}}">>,
+   "    {aaaaaaaaaaaaa,\n"
+   "        {aaaaaaaaaaaaa,\n"
+   "            {aaaaaaaaaaaaa,\n"
+   "                {aaaaaaaaaaaaa,\n"
+   "                    {aaaaaaaaaaaaa,\n"
+   "                        {g,{h,{i,{j,{k,{l,{m,{n,{o,#"
+   "d{...}}}}}}}}}}}}}}}}">>,
        p({A,{A,{A,{A,{A,{A,
-			 {g,{h,{i,{j,{k,{l,{m,{n,{o,{d,1,2,3,4,5}}}}}}}}}}}}}}}}, 32)),
+       {g,{h,{i,{j,{k,{l,{m,{n,{o,{d,1,2,3,4,5}}}}}}}}}}}}}}}}, 32)),
     bt(<<"{a,#b{f = {c,{d,{e,{f,...}}}}}}">>,
        p({a,{b,{c,{d,{e,{f,g}}}}}}, 12)),
     bt(<<"{aaaaaaaaaaaaa,\n"
-	 "    {aaaaaaaaaaaaa,\n"
-	 "        {aaaaaaaaaaaaa,\n"
-	 "            {aaaaaaaaaaaaa,\n"
-	 "                {aaaaaaaaaaaaa,\n"
-	 "                    {aaaaaaaaaaaaa,\n"
-	 "                        {aaaaaaaaaaaaa,\n"
-	 "                            {aaaaaaaaaaaaa,\n"
-	 "                                {aaaaaaaaaaaaa,#c{f1 = ddd,"
-	 "f2 = eee}}}}}}}}}}">>,
+   "    {aaaaaaaaaaaaa,\n"
+   "        {aaaaaaaaaaaaa,\n"
+   "            {aaaaaaaaaaaaa,\n"
+   "                {aaaaaaaaaaaaa,\n"
+   "                    {aaaaaaaaaaaaa,\n"
+   "                        {aaaaaaaaaaaaa,\n"
+   "                            {aaaaaaaaaaaaa,\n"
+   "                                {aaaaaaaaaaaaa,#c{f1 = ddd,"
+   "f2 = eee}}}}}}}}}}">>,
        p({A,{A,{A,{A,{A,{A,{A,{A,{A,{c,ddd,eee}}}}}}}}}}, 100)),
     bt(<<"{aaaaaaaaaaaaa,\n"
-	 "    {aaaaaaaaaaaaa,{aaaaaaaaaaaaa,{aaaaaaaaaaaaa,...}}}}">>,
+   "    {aaaaaaaaaaaaa,{aaaaaaaaaaaaa,{aaaaaaaaaaaaa,...}}}}">>,
        p({A,{A,{A,{A,{b}}}}}, 8)),
     bt(<<"{aaaaaaaaaaaaa,\n"
-	 "    {aaaaaaaaaaaaa,\n"
-	 "        {aaaaaaaaaaaaa,{aaaaaaaaaaaaa,{aaaaaaaaaaaaa,...}}}}}">>,
+   "    {aaaaaaaaaaaaa,\n"
+   "        {aaaaaaaaaaaaa,{aaaaaaaaaaaaa,{aaaaaaaaaaaaa,...}}}}}">>,
        p({A,{A,{A,{A,{A,{b}}}}}}, 10)),
     bt(<<"{aaaaaaaaaaaaa,\n"
-	 "    {aaaaaaaaaaaaa,\n"
-	 "        {aaaaaaaaaaaaa,\n"
-	 "            {aaaaaaaaaaaaa,\n"
-	 "                {aaaaaaaaaaaaa,\n"
-	 "                    {aaaaaaaaaaaaa,\n"
-	 "                        {aaaaaaaaaaaaa,\n"
-	 "                            {aaaaaaaaaaaaa,\n"
-	 "                                {aaaaaaaaaaaaa,"
-	 "{aaaaaaaaaaaaa,#a{}}}}}}}}}}}">>,
+   "    {aaaaaaaaaaaaa,\n"
+   "        {aaaaaaaaaaaaa,\n"
+   "            {aaaaaaaaaaaaa,\n"
+   "                {aaaaaaaaaaaaa,\n"
+   "                    {aaaaaaaaaaaaa,\n"
+   "                        {aaaaaaaaaaaaa,\n"
+   "                            {aaaaaaaaaaaaa,\n"
+   "                                {aaaaaaaaaaaaa,"
+   "{aaaaaaaaaaaaa,#a{}}}}}}}}}}}">>,
        p({A,{A,{A,{A,{A,{A,{A,{A,{A,{A,{a}}}}}}}}}}}, 23)),
     bt(<<"{aaaaaaaaaaaaa,\n"
-	 "    {aaaaaaaaaaaaa,\n"
-	 "        {aaaaaaaaaaaaa,\n",
-	 "            #rrrrr{\n"
-	 "                f1 = kljlkjlksfdgkljlsdkjf,"
-	 "f2 = kljkljsdaflkjlkjsdf,...}}}}">>,
+   "    {aaaaaaaaaaaaa,\n"
+   "        {aaaaaaaaaaaaa,\n",
+   "            #rrrrr{\n"
+   "                f1 = kljlkjlksfdgkljlsdkjf,"
+   "f2 = kljkljsdaflkjlkjsdf,...}}}}">>,
        p({A,{A,{A,{rrrrr, kljlkjlksfdgkljlsdkjf,
-		   kljkljsdaflkjlkjsdf,
-		   asdfkldsjfklkljsdklfds}}}}, 10)),
+       kljkljsdaflkjlkjsdf,
+       asdfkldsjfklkljsdklfds}}}}, 10)),
     bt(<<"{aaaaaaaaaaaaa,\n"
-	 "    {aaaaaaaaaaaaa,\n"
-	 "        {aaaaaaaaaaaaa,\n"
-	 "            {aaaaaaaaaaaaa,\n"
-	 "                {aaaaaaaaaaaaa,\n"
-	 "                    {aaaaaaaaaaaaa,\n"
-	 "                        {aaaaaaaaaaaaa,\n"
-	 "                            {g,{h,{i,{j,{k,{l,{m,{n,"
-	 "{o,#a{}}}}}}}}}}}}}}}}}">>,
+   "    {aaaaaaaaaaaaa,\n"
+   "        {aaaaaaaaaaaaa,\n"
+   "            {aaaaaaaaaaaaa,\n"
+   "                {aaaaaaaaaaaaa,\n"
+   "                    {aaaaaaaaaaaaa,\n"
+   "                        {aaaaaaaaaaaaa,\n"
+   "                            {g,{h,{i,{j,{k,{l,{m,{n,"
+   "{o,#a{}}}}}}}}}}}}}}}}}">>,
        p({A,{A,{A,{A,{A,{A,{A,
-			    {g,{h,{i,{j,{k,{l,{m,{n,{o,{a}}}}}}}}}}}}}}}}}, 100)),
+          {g,{h,{i,{j,{k,{l,{m,{n,{o,{a}}}}}}}}}}}}}}}}}, 100)),
     bt(<<"#c{\n"
-	 " f1 =\n"
-	 "  #c{\n"
-	 "   f1 =\n"
-	 "    #c{\n"
-	 "     f1 =\n"
-	 "      #c{\n"
-	 "       f1 =\n"
-	 "        #c{\n"
-	 "         f1 =\n"
-	 "          #c{\n"
-	 "           f1 =\n"
-	 "            #c{\n"
-	 "             f1 =\n"
-	 "              #c{\n"
-	 "               f1 =\n"
-	 "                #c{\n"
-	 "                 f1 = #c{f1 = #c{f1 = #c{f1 = a,"
-	 "f2 = b},f2 = b},f2 = b},\n"
-	 "                 f2 = b},\n"
-	 "               f2 = b},\n"
-	 "             f2 = b},\n"
-	 "           f2 = b},\n"
-	 "         f2 = b},\n"
-	 "       f2 = b},\n"
-	 "     f2 = b},\n"
-	 "   f2 = b},\n"
-	 " f2 = b}">>,
+   " f1 =\n"
+   "  #c{\n"
+   "   f1 =\n"
+   "    #c{\n"
+   "     f1 =\n"
+   "      #c{\n"
+   "       f1 =\n"
+   "        #c{\n"
+   "         f1 =\n"
+   "          #c{\n"
+   "           f1 =\n"
+   "            #c{\n"
+   "             f1 =\n"
+   "              #c{\n"
+   "               f1 =\n"
+   "                #c{\n"
+   "                 f1 = #c{f1 = #c{f1 = #c{f1 = a,"
+   "f2 = b},f2 = b},f2 = b},\n"
+   "                 f2 = b},\n"
+   "               f2 = b},\n"
+   "             f2 = b},\n"
+   "           f2 = b},\n"
+   "         f2 = b},\n"
+   "       f2 = b},\n"
+   "     f2 = b},\n"
+   "   f2 = b},\n"
+   " f2 = b}">>,
        p({c,{c,{c,{c,{c,{c,{c,{c,{c,{c,{c,{c,a,b},b},b},b},b},b},
-			 b},b},b},b},b},b}, -1)),
+       b},b},b},b},b},b}, -1)),
     bt(<<"#rrrrr{\n"
-	 " f1 =\n"
-	 "  #rrrrr{\n"
-	 "   f1 =\n"
-	 "    #rrrrr{\n"
-	 "     f1 =\n"
-	 "      #rrrrr{\n"
-	 "       f1 =\n"
-	 "        {rrrrr,{rrrrr,a,#rrrrr{f1 = {rrrrr,1,2},f2 = a,"
-	 "f3 = b}},b},\n"
-	 "       f2 = {rrrrr,c,d},\n"
-	 "       f3 = {rrrrr,1,2}},\n"
-	 "     f2 = 1,f3 = 2},\n"
-	 "   f2 = 3,f3 = 4},\n"
-	 " f2 = 5,f3 = 6}">>,
+   " f1 =\n"
+   "  #rrrrr{\n"
+   "   f1 =\n"
+   "    #rrrrr{\n"
+   "     f1 =\n"
+   "      #rrrrr{\n"
+   "       f1 =\n"
+   "        {rrrrr,{rrrrr,a,#rrrrr{f1 = {rrrrr,1,2},f2 = a,"
+   "f3 = b}},b},\n"
+   "       f2 = {rrrrr,c,d},\n"
+   "       f3 = {rrrrr,1,2}},\n"
+   "     f2 = 1,f3 = 2},\n"
+   "   f2 = 3,f3 = 4},\n"
+   " f2 = 5,f3 = 6}">>,
        p({rrrrr,{rrrrr,{rrrrr,{rrrrr,{rrrrr,{rrrrr,a,{rrrrr,
-						      {rrrrr,1,2},a,b}},b},{rrrrr,c,d},{rrrrr,1,2}},
-			1,2},3,4},5,6}, -1)),
+                  {rrrrr,1,2},a,b}},b},{rrrrr,c,d},{rrrrr,1,2}},
+      1,2},3,4},5,6}, -1)),
     "{aaa,\n {aaa," ++ _ =
         p({aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,
-								       {aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,
-															       {aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,
-																						  {aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,
-																												{aaa,a}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
+                       {aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,
+                                     {aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,
+                                              {aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,{aaa,
+                                                        {aaa,a}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}},
           1, 80, -1),
 
     %% A few other cases...
@@ -599,9 +598,9 @@ otp_6354(Config) when is_list(Config) ->
     "#Fun<" ++ _ = io_lib_pretty:print(fun() -> foo end),
     %% No support for negative columns any more:
     "[a,\n [b,\n  c,\n  d,\n  [e,\n   f]],\n c]" =
-	p([a,[b,c,d,[e,f]],c], -1, 2, 10),
+  p([a,[b,c,d,[e,f]],c], -1, 2, 10),
     "[a,\n [b,\n  c,\n  d,\n  [e,\n   f]],\n c]" =
-	p([a,[b,c,d,[e,f]],c], 0, 2, 10),
+  p([a,[b,c,d,[e,f]],c], 0, 2, 10),
     %% 20 bytes are tried first, then the rest. Try 21 bytes:
     L = lists:duplicate(20, $a),
     %% bt(<<"<<\"aaaaaa\"\n  \"aaaaaa\"\n  \"aaaaaa\"\n  \"aaa\">>">>,
@@ -611,24 +610,24 @@ otp_6354(Config) when is_list(Config) ->
     "<<97," ++ _ = p(list_to_binary(L ++ [3]), 1, 10, 22),
 
     "\"\\b\\t\\n\\v\\f\\r\\e\250\"" =
-	p([8,9,10,11,12,13,27,168], 1, 40, -1),
+  p([8,9,10,11,12,13,27,168], 1, 40, -1),
     %% "\"\\b\\t\\n\"\n \"\\v\\f\\r\"\n \"\\e\250\"" =
     "\"\\b\\t\\n\\v\\f\\r\\e¨\"" =
-	p([8,9,10,11,12,13,27,168], 1, 10, -1),
+  p([8,9,10,11,12,13,27,168], 1, 10, -1),
     "\"\\b\\t\\n\\v\\f\\r\\e\250\"" =
-	p([8,9,10,11,12,13,27,168], 1, 40, 100),
+  p([8,9,10,11,12,13,27,168], 1, 40, 100),
     %% "\"\\e\\t\\nab\"\n \"cd\"" =
     "\"\\e\\t\\nabcd\"" =
-	p("\e\t\nabcd", 1, 12, -1),
+  p("\e\t\nabcd", 1, 12, -1),
 
     %% DEL (127) is special...
     "[127]" = p("\d", 1, 10, -1),
     "[127]" = p([127], 1, 10, 100),
 
     "<<\"\\b\\t\\n\\v\\f\\r\\e\250\">>" =
-	p(<<8,9,10,11,12,13,27,168>>, 1, 40, -1),
+  p(<<8,9,10,11,12,13,27,168>>, 1, 40, -1),
     "<<\"\\b\\t\\n\\v\\f\\r\\e\250\">>" =
-	p(<<8,9,10,11,12,13,27,168>>, 1, 10, -1),
+  p(<<8,9,10,11,12,13,27,168>>, 1, 10, -1),
     "<<127>>" = p(<<127>>, 1, 10, 100),
 
     %% "Partial" string binaries:
@@ -640,26 +639,26 @@ otp_6354(Config) when is_list(Config) ->
     "<<3,104,...>>" = p(list_to_binary([3] ++ "he"), 1, 80, 3),
 
     "<<\"12345678901234567890\"...>>" =
-	p(list_to_binary("12345678901234567890"++[3]), 1, 80, 8),
+  p(list_to_binary("12345678901234567890"++[3]), 1, 80, 8),
     "<<\"12345678901234567890\"...>>" =
-	p(list_to_binary("12345678901234567890"++[3]), 1, 80, 21),
+  p(list_to_binary("12345678901234567890"++[3]), 1, 80, 21),
     "<<49," ++ _ =
-	p(list_to_binary("12345678901234567890"++[3]), 1, 80, 22),
+  p(list_to_binary("12345678901234567890"++[3]), 1, 80, 22),
 
     "{sdfsdfj,\n    23" ++ _ =
-	p({sdfsdfj,23423423342.23432423}, 1, 17, -1),
+  p({sdfsdfj,23423423342.23432423}, 1, 17, -1),
 
     bt(<<"kljkljlksdjjlf kljalkjlsdajafasjdfj [kjljklasdf,kjlljsfd,sdfsdkjfsd,kjjsdf,jl,
                                      lkjjlajsfd|jsdf]">>,
-             fmt("~w ~w ~p", 
+             fmt("~w ~w ~p",
                  [kljkljlksdjjlf,
                   kljalkjlsdajafasjdfj,
-                  [kjljklasdf,kjlljsfd,sdfsdkjfsd,kjjsdf,jl,lkjjlajsfd | 
+                  [kjljklasdf,kjlljsfd,sdfsdkjfsd,kjjsdf,jl,lkjjlajsfd |
                    jsdf]])),
 
     %% Binaries are split as well:
     bt(<<"<<80,100,0,55,55,55,55,55,55,55,55,55,\n  "
-               "55,55,55,55,55,55,55,...>>">>, 
+               "55,55,55,55,55,55,55,...>>">>,
              p(<<80,100,0,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
                  55,55,55,55,55,55,55,55,55,55,55,55>>,1,40,20)),
     bt(<<"<<80,100,0,55,55,55,55,55,55,55,55,55,\n  "
@@ -730,7 +729,7 @@ rp(Term, Col, Ll, D, RF) ->
 rp(Term, Col, Ll, D, M, none) ->
     rp(Term, Col, Ll, D, M, fun(_, _) -> no end);
 rp(Term, Col, Ll, D, M, RF) ->
-    %% io:format("~n~n*** Col = ~p Ll = ~p D = ~p~n~p~n-->~n", 
+    %% io:format("~n~n*** Col = ~p Ll = ~p D = ~p~n~p~n-->~n",
     %%           [Col, Ll, D, Term]),
     R = io_lib_pretty:print(Term, Col, Ll, D, M, RF),
     %% io:format("~s~n<--~n", [R]),
@@ -844,11 +843,11 @@ otp_6708(Config) when is_list(Config) ->
                 jklsdjfklsd, masdfjkkl}, -1)),
     bt(<<"#b{f = {lkjljalksdf,jklaskfjd,kljasdlf,kljasdf,kljsdlkf,\n"
                "                    kjdd}}">>,
-             p({b, {lkjljalksdf,jklaskfjd,kljasdlf,kljasdf,kljsdlkf,kjdd}}, 
+             p({b, {lkjljalksdf,jklaskfjd,kljasdlf,kljasdf,kljsdlkf,kjdd}},
                -1)),
     bt(<<"#b{f = {lkjljalksdf,jklaskfjd,kljasdlf,kljasdf,kljsdlkf,\n"
                "                    kdd}}">>,
-             p({b, {lkjljalksdf,jklaskfjd,kljasdlf,kljasdf,kljsdlkf,kdd}}, 
+             p({b, {lkjljalksdf,jklaskfjd,kljasdlf,kljasdf,kljsdlkf,kdd}},
                -1)),
     bt(<<"#e{f = undefined,g = undefined,\n"
                "   h = #e{f = 11,g = 22,h = 333}}">>,
@@ -860,7 +859,7 @@ otp_6708(Config) when is_list(Config) ->
                " 23,\n"
                " {{abadalkjlasdjflksdajfksdklfsdjlkfdlskjflsdj"
                         "flsdjfldsdsdddd}}]">>,
-          p(lists:seq(1,23) ++ 
+          p(lists:seq(1,23) ++
             [{{abadalkjlasdjflksdajfksdklfsdjlkfdlskjflsdjflsdjfldsdsdddd}}],
             -1)),
     bt(<<"{lkjasdf,\n"
@@ -949,10 +948,10 @@ otp_7084(Config) when is_list(Config) ->
          {g_choice, fun g_choice/0},
          {g_misc, fun g_misc/0}],
     F = fun({M,T}) -> io:format("~p~n", [M]), T() end,
-    R = try 
+    R = try
             lists:foreach(fun(T) -> F(T) end, L),
             ok
-        catch throw:Reason -> 
+        catch throw:Reason ->
             Reason
         end,
     R.
@@ -992,7 +991,7 @@ g_denormalized() ->
     [ft({{S,0,?ONE(N)},D,D}) || S <- [0,1], N <- lists:seq(0, 52)],
     ok.
 
-g_normalized() -> 
+g_normalized() ->
     %% Normalized floats (exponent carry):
 %%    D = 5,
     %% Faster:
@@ -1010,7 +1009,7 @@ g_choice() ->
     lists:foreach(fun(V) -> g_t(V) end, L),
     ok.
 
-g_misc() -> 
+g_misc() ->
     L_0_308 = lists:seq(0, 308),
     L_0_307 = lists:seq(0, 307),
 
@@ -1098,16 +1097,16 @@ g_t_1(V, Sv) ->
     %% to V than Sv, but such that when reading SvMinus (SvPlus) wrong
     %% float would be returned.
     case rat_lte(Abs_Sv_Vr, Svminus_Vr) of
-        true -> 
+        true ->
             ok;
-        false ->  
+        false ->
              case list_to_float(SvMinus) of
                  V -> throw(vsminus_too_close_to_v);
                  _Vminus -> ok
              end
     end,
     case rat_lte(Abs_Sv_Vr, Svplus_Vr) of
-        true -> 
+        true ->
             ok;
         false ->
              case list_to_float(SvPlus) of
@@ -1121,7 +1120,7 @@ g_t_1(V, Sv) ->
     %%       that |V - Sv| =< (V+ - V)
     %% (An alternative is  V- + V =< 2*Sv =< V + V+.)
     case inc(V) of
-        inf -> 
+        inf ->
             ok;
         Vplus ->
             Vplusr = f2r(Vplus),
@@ -1176,7 +1175,7 @@ g_t_1(V, Sv) ->
 
     ok.
 
-%%% In "123450000.0", '5' is the lsd; 
+%%% In "123450000.0", '5' is the lsd;
 %%% in "1234.0000", (the last) '0' is the lsd;
 %%% in "1234.0", '4' is the lsd (the Erlang syntax requires the final zero).
 
@@ -1212,7 +1211,7 @@ step_lsd(Ds, N) when N < 0 ->
 %% Increments or decrements the least significant digit.
 incr_lsd("-"++Ds, I) ->
     "-"++incr_lsd(Ds, I);
-incr_lsd(Ds, I) when I =:= 1; I =:= -1 -> 
+incr_lsd(Ds, I) when I =:= 1; I =:= -1 ->
     [MS|E] = string:tokens(Ds, "eE"),
     X = ["e" || true <- [E =/= []]],
     lists:flatten([incr_lsd0(lists:reverse(MS), I, []), X, E]).
@@ -1245,7 +1244,7 @@ s2r(S) when is_list(S) ->
         [MS, ES] ->
             Mr = s10(MS),
             E = list_to_integer(ES),
-            if 
+            if
                 E < 0 ->
                     rat_multiply(Mr, {1,pow10(-E)});
                 true ->
@@ -1289,7 +1288,7 @@ dec({S,BE,M}) when 0 =< S, S =< 1,
     <<F1:64/float>> = <<S1:1, BE1:11, M1:52>>,
     true = F1 < F,
     F1.
-    
+
 
 dec1(0, 0, 0) ->
     dec1(1, 0, 0);
@@ -1389,12 +1388,12 @@ rat_normalize({T,N}) when N =/= 0 ->
     N2 = N div G,
     if
         T2 < 0 ->
-            if 
+            if
                 N2 < 0 -> {-T2,-N2};
                 true -> {T2,N2}
             end;
         true ->
-            if 
+            if
                 N2 < 0 -> {-T2,-N2};
                 true -> {T2,N2}
             end
@@ -1456,7 +1455,7 @@ g_choice(S) when is_list(S) ->
             end;
         Pre =:= 0, Post =:= 0, El > 0 ->   % D.DDDeDD
             E = list_to_integer(ES),
-            if 
+            if
                 E >= 0 ->
                     Cost = E - (Fl - 1);
                 E < 0 ->
@@ -1533,10 +1532,10 @@ do_collect_line_2(Part1, Part2) ->
 
 do_collect_line_3(State0, [H|T], Dummy) ->
     case io_lib:collect_line(State0, H, Dummy) of
-	{stop,Line,Rest} ->
-	    {stop,Line,do_collect_line_adjust_rest(Rest, T)};
-	State ->
-	    do_collect_line_3(State, T, Dummy)
+  {stop,Line,Rest} ->
+      {stop,Line,do_collect_line_adjust_rest(Rest, T)};
+  State ->
+      do_collect_line_3(State, T, Dummy)
     end.
 
 do_collect_line_adjust_rest(eof, []) -> eof;
@@ -1569,10 +1568,10 @@ io_fread_newlines(Config) when is_list(Config) ->
     F9 = [[0],[1],[2],[3],[4],[5],[6],[7],[8],[9]],
     Newlines = ["\n", "\r\n", "\r"],
     try
-	io_fread_newlines_1([F0,F1,F2,F3,F4,F5,F6,F7,F8,F9],
-				  Fname, Newlines)
+  io_fread_newlines_1([F0,F1,F2,F3,F4,F5,F6,F7,F8,F9],
+          Fname, Newlines)
     after
-	file:delete(Fname)
+  file:delete(Fname)
     end.
 
 io_fread_newlines_1(Fs, Fname, [Newline|Newlines]) ->
@@ -1610,21 +1609,21 @@ digit_line([D|Ds]) ->
 read_newlines_file(Fname) ->
     {ok,Fd} = file:open(Fname, [read]),
     try {L, N0} = R0 = read_newlines(Fd, [], 0),
-	case io:fread(Fd, "", "~*s~l") of
-	    eof -> R0;
-	    {ok,[N]} -> {L,N0+N}
-	end
+  case io:fread(Fd, "", "~*s~l") of
+      eof -> R0;
+      {ok,[N]} -> {L,N0+N}
+  end
     after
-	file:close(Fd)
+  file:close(Fd)
     end.
-    
+
 
 read_newlines(Fd, Acc, N0) ->
     case io:fread(Fd, "", "~d~l") of
-	{ok,[D,N]} ->
-	    read_newlines(Fd, [D|Acc], N0+N);
-	eof ->
-	    {lists:reverse(Acc),N0}
+  {ok,[D,N]} ->
+      read_newlines(Fd, [D|Acc], N0+N);
+  eof ->
+      {lists:reverse(Acc),N0}
     end.
 
 
@@ -1734,56 +1733,56 @@ io_lib_fread_literal(Suite) when is_list(Suite) ->
 printable_range(Suite) when is_list(Suite) ->
     Pa = filename:dirname(code:which(?MODULE)),
     {ok, UNode} = test_server:start_node(printable_range_unicode, slave,
-					 [{args, " +pc unicode -pa " ++ Pa}]),
+           [{args, " +pc unicode -pa " ++ Pa}]),
     {ok, LNode} = test_server:start_node(printable_range_latin1, slave,
-					 [{args, " +pc latin1 -pa " ++ Pa}]),
+           [{args, " +pc latin1 -pa " ++ Pa}]),
     {ok, DNode} = test_server:start_node(printable_range_default, slave,
-					 [{args, " -pa " ++ Pa}]),
+           [{args, " -pa " ++ Pa}]),
     unicode = rpc:call(UNode,io,printable_range,[]),
     latin1 = rpc:call(LNode,io,printable_range,[]),
     latin1 = rpc:call(DNode,io,printable_range,[]),
     test_server:stop_node(UNode),
     test_server:stop_node(LNode),
     {ok, UNode} = test_server:start_node(printable_range_unicode, slave,
-					 [{args, " +pcunicode -pa " ++ Pa}]),
+           [{args, " +pcunicode -pa " ++ Pa}]),
     {ok, LNode} = test_server:start_node(printable_range_latin1, slave,
-					 [{args, " +pclatin1 -pa " ++ Pa}]),
+           [{args, " +pclatin1 -pa " ++ Pa}]),
     unicode = rpc:call(UNode,io,printable_range,[]),
     latin1 = rpc:call(LNode,io,printable_range,[]),
     PrettyOptions = [{column,1},
-		     {line_length,109},
-		     {depth,30},
-		     {line_max_chars,60},
-		     {record_print_fun,
-		      fun(_,_) -> no end},
-		     {encoding,unicode}],
+         {line_length,109},
+         {depth,30},
+         {line_max_chars,60},
+         {record_print_fun,
+          fun(_,_) -> no end},
+         {encoding,unicode}],
     PrintableControls = "\t\v\b\f\e\r\n",
 
     1025 = print_max(UNode, [{hello, [1024,1025]},
-			     PrettyOptions]),
+           PrettyOptions]),
     125 = print_max(LNode,  [{hello, [1024,1025]},
-			     PrettyOptions]),
+           PrettyOptions]),
     125 = print_max(DNode,  [{hello, [1024,1025]},
-			     PrettyOptions]),
+           PrettyOptions]),
     1025 = print_max(UNode, [{hello, <<1024/utf8,1025/utf8>>},
-			     PrettyOptions]),
+           PrettyOptions]),
     125 = print_max(LNode,  [{hello, <<1024/utf8,1025/utf8>>},
-			     PrettyOptions]),
+           PrettyOptions]),
     125 = print_max(DNode,  [{hello, <<1024/utf8,1025/utf8>>},
-			     PrettyOptions]),
+           PrettyOptions]),
     $v = print_max(UNode, [PrintableControls,PrettyOptions]),
     $v = print_max(LNode, [PrintableControls,PrettyOptions]),
     $v = print_max(DNode, [PrintableControls,PrettyOptions]),
     16#10FFFF = print_max(UNode,
-			  [<<16#10FFFF/utf8,"\t\v\b\f\e\r\n">>,
-			   PrettyOptions]),
+        [<<16#10FFFF/utf8,"\t\v\b\f\e\r\n">>,
+         PrettyOptions]),
     $> = print_max(LNode,
-		   [<<16#10FFFF/utf8,"\t\v\b\f\e\r\n">>,
-		    PrettyOptions]),
+       [<<16#10FFFF/utf8,"\t\v\b\f\e\r\n">>,
+        PrettyOptions]),
     $> = print_max(DNode,
-		   [<<16#10FFFF/utf8,"\t\v\b\f\e\r\n">>,
-		    PrettyOptions]),
-    
+       [<<16#10FFFF/utf8,"\t\v\b\f\e\r\n">>,
+        PrettyOptions]),
+
     1025 = format_max(UNode, ["~tp", [{hello, [1024,1025]}]]),
     125 = format_max(LNode,  ["~tp", [{hello, [1024,1025]}]]),
     125 = format_max(DNode,  ["~tp", [{hello, [1024,1025]}]]),
@@ -1828,9 +1827,9 @@ bad_printable_range(Config) when is_list(Config) ->
 
 flush_from_port(P) ->
     receive {P, _} ->
-	    flush_from_port(P)
+      flush_from_port(P)
     after 0 ->
-	    ok
+      ok
     end.
 
 %% Test binaries printed with a depth of one behave correctly.
@@ -1847,15 +1846,15 @@ io_lib_print_binary_depth_one(Suite) when is_list(Suite) ->
 otp_10302(Suite) when is_list(Suite) ->
     Pa = filename:dirname(code:which(?MODULE)),
     {ok, UNode} = test_server:start_node(printable_range_unicode, slave,
-					 [{args, " +pc unicode -pa " ++ Pa}]),
+           [{args, " +pc unicode -pa " ++ Pa}]),
     {ok, LNode} = test_server:start_node(printable_range_latin1, slave,
-					 [{args, " +pc latin1 -pa " ++ Pa}]),
+           [{args, " +pc latin1 -pa " ++ Pa}]),
     "\"\x{400}\"" = rpc:call(UNode,?MODULE,pretty,["\x{400}", -1]),
     "<<\"\x{400}\"/utf8>>" = rpc:call(UNode,?MODULE,pretty,
-				      [<<"\x{400}"/utf8>>, -1]),
+              [<<"\x{400}"/utf8>>, -1]),
 
     "<<\"\x{400}foo\"/utf8>>" = rpc:call(UNode,?MODULE,pretty,
-					 [<<"\x{400}foo"/utf8>>, 2]),
+           [<<"\x{400}foo"/utf8>>, 2]),
     "[1024]" = rpc:call(LNode,?MODULE,pretty,["\x{400}", -1]),
     "<<208,128>>" = rpc:call(LNode,?MODULE,pretty,[<<"\x{400}"/utf8>>, -1]),
 
@@ -1983,14 +1982,14 @@ io_lib_width_too_small(_Config) ->
 %% significantly slower than with an empty message queue.
 io_with_huge_message_queue(Config) when is_list(Config) ->
     case {test_server:is_native(gen),test_server:is_cover()} of
-	{true,_} ->
-	    {skip,
-	     "gen is native - huge message queue optimization "
-	     "is not implemented"};
-	{_,true} ->
-	    {skip,"Running under cover"};
-	{false,false} ->
-	    do_io_with_huge_message_queue(Config)
+  {true,_} ->
+      {skip,
+       "gen is native - huge message queue optimization "
+       "is not implemented"};
+  {_,true} ->
+      {skip,"Running under cover"};
+  {false,false} ->
+      do_io_with_huge_message_queue(Config)
     end.
 
 do_io_with_huge_message_queue(Config) ->
@@ -1998,9 +1997,9 @@ do_io_with_huge_message_queue(Config) ->
     File = filename:join(PrivDir, "slask"),
     {ok, F1} = file:open(File, [write]),
     Test = fun(Times) ->
-		   {Time,ok} = timer:tc(fun() -> writes(Times, F1) end),
-		   Time
-	   end,
+       {Time,ok} = timer:tc(fun() -> writes(Times, F1) end),
+       Time
+     end,
     {Times,EmptyTime} = calibrate(100, Test),
 
     [self() ! {msg,N} || N <- lists:seq(1, 500000)],
@@ -2013,11 +2012,11 @@ do_io_with_huge_message_queue(Config) ->
     io:format("Time for huge message queue: ~p", [FullTime]),
 
     case (FullTime+1) / (EmptyTime+1) of
-	Q when Q < 10 ->
-	    ok;
-	Q ->
-	    io:format("Q = ~p", [Q]),
-	    ct:fail(failed)
+  Q when Q < 10 ->
+      ok;
+  Q ->
+      io:format("Q = ~p", [Q]),
+      ct:fail(failed)
     end,
     ok.
 
@@ -2025,10 +2024,10 @@ do_io_with_huge_message_queue(Config) ->
 %% test case to fail.
 calibrate(N, Test) when N =< 100000 ->
     case Test(N) of
-	Time when Time < 50000 ->
-	    calibrate(10*N, Test);
-	Time ->
-	    {N,Time}
+  Time when Time < 50000 ->
+      calibrate(10*N, Test);
+  Time ->
+      {N,Time}
     end;
 calibrate(N, _) ->
     N.
@@ -2058,17 +2057,17 @@ maps(_Config) ->
     "#{}" = fmt("~w", [#{}]),
     "#{a => b}" = fmt("~w", [#{a=>b}]),
     re_fmt(<<"#\\{(a => b),[.][.][.]\\}">>,
-	     "~W", [#{a => b,c => d},2]),
+       "~W", [#{a => b,c => d},2]),
     re_fmt(<<"#\\{(a => b),[.][.][.]\\}">>,
-	   "~W", [#{a => b,c => d,e => f},2]),
+     "~W", [#{a => b,c => d,e => f},2]),
 
     "#{}" = fmt("~p", [#{}]),
     "#{a => b}" = fmt("~p", [#{a => b}]),
     "#{...}" = fmt("~P", [#{a => b},1]),
     re_fmt(<<"#\\{(a => b|c => d),[.][.][.]\\}">>,
-	   "~P", [#{a => b,c => d},2]),
+     "~P", [#{a => b,c => d},2]),
     re_fmt(<<"#\\{(a => b|c => d|e => f),[.][.][.]\\}">>,
-	   "~P", [#{a => b,c => d,e => f},2]),
+     "~P", [#{a => b,c => d,e => f},2]),
 
     List = [{I,I*I} || I <- lists:seq(1, 20)],
     Map = maps:from_list(List),
@@ -2088,12 +2087,12 @@ maps(_Config) ->
 re_fmt(Pattern, Format, Args) ->
     S = list_to_binary(fmt(Format, Args)),
     case re:run(S, Pattern, [{capture,none}]) of
-	nomatch ->
-	    io:format("Pattern: ~s", [Pattern]),
-	    io:format("Result:  ~s", [S]),
-	    ct:fail(failed);
-	match ->
-	    ok
+  nomatch ->
+      io:format("Pattern: ~s", [Pattern]),
+      io:format("Result:  ~s", [S]),
+      ct:fail(failed);
+  match ->
+      ok
     end.
 
 %% Parse a map consisting of integer keys and values.
@@ -2109,12 +2108,12 @@ parse_map_1(S0) ->
     S2 = parse_expect(S1, "=>"),
     {Val,S3} = parse_number(S2),
     case S3 of
-	","++S4 ->
-	    S5 = parse_skip_ws(S4),
-	    {Map,S} = parse_map_1(S5),
-	    {Map#{Key=>Val},S};
-	S ->
-	    {#{Key=>Val},S}
+  ","++S4 ->
+      S5 = parse_skip_ws(S4),
+      {Map,S} = parse_map_1(S5),
+      {Map#{Key=>Val},S};
+  S ->
+      {#{Key=>Val},S}
     end.
 
 parse_number(S) ->
@@ -2122,9 +2121,9 @@ parse_number(S) ->
 
 parse_number([C|S], Acc0) when $0 =< C, C =< $9 ->
     Acc = case Acc0 of
-	      none -> 0;
-	      _ when is_integer(Acc0) -> Acc0
-	  end,
+        none -> 0;
+        _ when is_integer(Acc0) -> Acc0
+    end,
     parse_number(S, Acc*10+C-$0);
 parse_number(S, Acc) ->
     {Acc,parse_skip_ws(S)}.
@@ -2251,7 +2250,7 @@ otp_14175(_Config) ->
        "      zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz}", p(M3, -1)),
 
     R4 = {c,{c,{c,{c,{c,{c,{c,{c,{c,{c,{c,{c,a,b},b},b},b},b},b},
-			 b},b},b},b},b},b},
+       b},b},b},b},b},b},
     M4 = #{aaaaaaaaaaaaaaaaaaaa => R4,
            bbbbbbbbbbbbbbbbbbbb => R4,
            cccccccccccccccccccc => R4,
@@ -2512,7 +2511,7 @@ trunc_string() ->
     "str ..." = trf("str ~8s", ["str1"], 6),
     Pa = filename:dirname(code:which(?MODULE)),
     {ok, UNode} = test_server:start_node(printable_range_unicode, slave,
-					 [{args, " +pc unicode -pa " ++ Pa}]),
+           [{args, " +pc unicode -pa " ++ Pa}]),
     U = "кирилли́ческий атом",
     UFun = fun(Format, Args, CharsLimit) ->
                    rpc:call(UNode,
