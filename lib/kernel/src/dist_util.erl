@@ -709,7 +709,12 @@ send_challenge(#hs_data{socket = Socket, this_node = Node,
 
         ?DFLAG_HANDSHAKE_23 ->
             %% Reply with new 'N' message
-            Creation = erts_internal:get_creation(),
+            Creation = case erts_internal:get_creation() of
+                           undefined ->
+                               0;
+                           N ->
+                               N
+                       end,
             NodeName = atom_to_binary(Node, latin1),
             NameLen = byte_size(NodeName),
             ?trace("send: 'N' challenge=~w creation=~w\n",
