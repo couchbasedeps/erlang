@@ -1340,7 +1340,20 @@ request_client_cert(#state{static_env = #static_env{cert_db = CertDbHandle,
 	  #security_parameters{cipher_suite = CipherSuite}} =
 	ssl_record:pending_connection_state(ConnectionStates0, read),
     TLSVersion =  ssl:tls_version(Version),
-    HashSigns = ssl_handshake:available_signature_algs(SupportedHashSigns, 
+    %% This removes extra signature schemes from the list in the event that
+    %% our tls version is < 1.3 ({3, 4} for us internally). This causes problems
+    %% down the line when we attempt to serialize the certificate_request
+    %% portion of the response.
+    FixedHashSigns = case TLSVersion of
+                         {3, N} when N < 4 ->
+                             lists:filter(
+                               fun({_, _}) -> true;
+                                  (_) -> false
+                               end, SupportedHashSigns);
+                         _ ->
+                             SupportedHashSigns
+                     end,
+    HashSigns = ssl_handshake:available_signature_algs(FixedHashSigns,
 						       TLSVersion),
     Msg = ssl_handshake:certificate_request(CipherSuite, CertDbHandle, CertDbRef, 
 					    HashSigns, TLSVersion),
