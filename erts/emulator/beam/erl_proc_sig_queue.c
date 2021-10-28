@@ -3285,11 +3285,10 @@ recv_marker_insert(Process *c_p, ErtsRecvMarker *markp, int setting)
 
         if (!setting && *c_p->sig_qs.save == (ErtsMessage *) &markp->sig) {
             /*
-             * This should most likely never happen (which is why the assert
-             * is here), but if it does, leave the message queue in a valid
-             * state...
+             * This can happen when a recv marker recently entered the message
+             * queue via erts_proc_sig_handle_incoming() through the midddle
+             * signal queue...
              */
-            ASSERT(0);
             markp->pass++;
             c_p->sig_qs.save = c_p->sig_qs.last;
         }
@@ -5077,6 +5076,10 @@ erts_proc_sig_handle_incoming(Process *c_p, erts_aint32_t *statep,
                                                 xsigd->u.ref);
                 if (omon) {
                     ASSERT(erts_monitor_is_origin(omon));
+                    if (omon->type == ERTS_MON_TYPE_ALIAS) {
+                        omon = NULL;
+                        break;
+                    }
                     mdp = erts_monitor_to_data(omon);
                     if (omon->type == ERTS_MON_TYPE_DIST_PROC) {
                         if (erts_monitor_dist_delete(&mdp->u.target))
