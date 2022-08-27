@@ -383,8 +383,10 @@ write_application_data(Data0, From,
     
     case time_to_renegotiate(Data, ConnectionStates0, RenegotiateAt) of
 	true ->
-	    Connection:renegotiate(State#state{renegotiation = {true, internal}}, 
-			[{next_event, {call, From}, {application_data, Data0}}]);
+            gen_statem:reply(From, {error, renegotiation_needed}),
+            handle_normal_shutdown(?ALERT_REC(?FATAL, ?CLOSE_NOTIFY),
+                                   connection, State),
+            {stop, {shutdown, renegotiation_needed}};
 	false ->
 	    {Msgs, ConnectionStates} = Connection:encode_data(Data, Version, ConnectionStates0),
 	    Result = Connection:send(Transport, Socket, Msgs),
