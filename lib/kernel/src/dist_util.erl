@@ -218,6 +218,7 @@ handshake_other_started(#hs_data{request_type=ReqType,
     {AcceptedPending, HSData2} = mark_pending(HSData1),
     Node = HSData2#hs_data.other_node,
     Cookie = auth:get_cookie(Node),
+    make_sure_cookie_is_set(Cookie, Node),
     ChallengeA = gen_challenge(),
     send_challenge(HSData2, ChallengeA),
     reset_timer(HSData2#hs_data.timer),
@@ -239,6 +240,12 @@ handshake_other_started(#hs_data{request_type=ReqType,
 handshake_other_started(OldHsData) when element(1,OldHsData) =:= hs_data ->
     handshake_other_started(convert_old_hsdata(OldHsData)).
 
+make_sure_cookie_is_set(nocookie, RemoteNode) ->
+    error_msg("** Connection attempt to/from node ~w rejected."
+              " Cookie is not set. **~n", [RemoteNode]),
+    ?shutdown2(RemoteNode, nocookie);
+make_sure_cookie_is_set(_, _) ->
+    ok.
 
 %%
 %% Check mandatory flags...
@@ -441,6 +448,7 @@ handshake_we_started(#hs_data{request_type=ReqType,
     check_dflags(HSData2, EDF),
     ChallengeB = gen_challenge(),
     Cookie = auth:get_cookie(Node),
+    make_sure_cookie_is_set(Cookie, Node),
     send_complement(HSData2, SendNameVersion),
     send_challenge_reply(HSData2, ChallengeB,
                          gen_digest(ChallengeA, Cookie)),
