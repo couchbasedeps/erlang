@@ -283,8 +283,13 @@ try_connect(Port) ->
 setup_proxy(Driver, Ip, Port, ExtraOpts, Parent) ->
     process_flag(trap_exit, true),
     Opts = connect_options(ExtraOpts ++ get_ssl_options(client)),
+    Timeout = try
+                  list_to_integer(os:getenv("ERL_TLS_DIST_CONNECT_TIMEOUT"))
+              catch
+                  _:_ -> 5000
+              end,
     case ssl:connect(Ip, Port, [{active, true}, binary, {packet,?PPRE}, nodelay(),
-                                Driver:family()] ++ Opts) of
+                                Driver:family()] ++ Opts, Timeout) of
 	{ok, World} ->
 	    {ok, ErtsL} = gen_tcp:listen(0, [{active, true}, {ip, loopback}, binary, {packet,?PPRE}]),
 	    {ok, #net_address{address={_,LPort}}} = get_tcp_address(ErtsL),
