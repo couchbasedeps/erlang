@@ -526,6 +526,12 @@ do_accept(
             {HSData0, NewAllowed} =
                 case DistSocket of
                     SslSocket = #sslsocket{} ->
+                        case application:get_env(kernel,
+                                                 cb_dist_post_tls_setup) of
+                            {ok, PostTls_Setup} ->
+                                PostTls_Setup(SslSocket, server);
+                            _ -> ok
+                        end,
                         HSDataSsl = hs_data_ssl(Family, SslSocket),
                         {HSDataSsl, allowed_nodes(SslSocket, Allowed)};
                     PortSocket when is_port(DistSocket) ->
@@ -679,6 +685,10 @@ do_setup(
                     end;
                 false ->
                     ok = ssl:controlling_process(SslSocket, self()),
+                    case application:get_env(kernel, cb_dist_post_tls_setup) of
+                        {ok, PostTls_Setup} -> PostTls_Setup(SslSocket, client);
+                        _ -> ok
+                    end,
                     hs_data_ssl(Family, SslSocket)
             end
             #hs_data{
