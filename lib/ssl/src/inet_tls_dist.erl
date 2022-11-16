@@ -452,6 +452,10 @@ do_accept(
 	{AcceptPid, controller} ->
             erlang:demonitor(MRef, [flush]),
             {ok, SslSocket} = tls_sender:dist_tls_socket(DistCtrl),
+            case application:get_env(kernel, cb_dist_post_tls_setup) of
+                {ok, PostTls_Setup} -> PostTls_Setup(SslSocket, server);
+                _ -> ok
+            end,
 	    Timer = dist_util:start_timer(SetupTime),
             NewAllowed = allowed_nodes(SslSocket, Allowed),
             HSData0 = hs_data_common(SslSocket),
@@ -594,6 +598,10 @@ do_setup_connect(Driver, Kernel, Node, Address, Ip, TcpPort, Version, Type, MyNo
         net_kernel:connecttime()) of
     {ok, #sslsocket{pid = [_, DistCtrl| _]} = SslSocket} ->
             _ = monitor_pid(DistCtrl),
+            case application:get_env(kernel, cb_dist_post_tls_setup) of
+                {ok, PostTls_Setup} -> PostTls_Setup(SslSocket, client);
+                _ -> ok
+            end,
             ok = ssl:controlling_process(SslSocket, self()),
             HSData0 = hs_data_common(SslSocket),
         HSData =
