@@ -370,6 +370,9 @@ wait_cert(enter, _, State0) ->
 wait_cert(internal = Type, #change_cipher_spec{} = Msg,
           #state{session = #session{session_id = Id}} = State) when Id =/= ?EMPTY_ID ->
     handle_change_cipher_spec(Type, Msg, ?FUNCTION_NAME, State);
+wait_cert(internal = Type, #change_cipher_spec{} = Msg,
+          #state{ssl_options = #{middlebox_comp_mode := true}} = State) ->
+    handle_change_cipher_spec(Type, Msg, ?FUNCTION_NAME, State);
 wait_cert(internal,
           #certificate_1_3{} = Certificate, State0) ->
     case tls_handshake_1_3:do_wait_cert(Certificate, State0) of
@@ -405,6 +408,9 @@ wait_cv(Type, Msg, State) ->
 wait_finished(enter, _, State0) ->
     State = handle_middlebox(State0),
     {next_state, ?FUNCTION_NAME, State,[]};
+wait_finished(internal = Type, #change_cipher_spec{} = Msg,
+              #state{ssl_options = #{middlebox_comp_mode := true}} = State) ->
+    handle_change_cipher_spec(Type, Msg, ?FUNCTION_NAME, State);
 wait_finished(internal = Type, #change_cipher_spec{} = Msg,
               #state{session = #session{session_id = Id}} = State) when Id =/= ?EMPTY_ID ->
     handle_change_cipher_spec(Type, Msg, ?FUNCTION_NAME, State);
