@@ -501,10 +501,10 @@ try_connect([Host|Hosts], Data) ->
     try do_connect(Host, Data, TcpOpts) of
 	{ok,Fd} -> {ok,Data#eldap{host = Host, fd   = Fd}};
 	Err    ->
-	    log2(Data, "Connect: ~p failed ~p~n",[Host, Err]),
+	    log1(Data, "Connect: ~p failed ~p~n",[Host, Err]),
 	    try_connect(Hosts, Data)
     catch _:Err ->
-	    log2(Data, "Connect: ~p failed ~p~n",[Host, Err]),
+	    log1(Data, "Connect: ~p failed ~p~n",[Host, Err]),
 	    try_connect(Hosts, Data)
     end;
 try_connect([],_) ->
@@ -1148,7 +1148,7 @@ v_attributes(Attrs) ->
 %%% Log routines. Call a user provided log routine F.
 %%% --------------------------------------------------------------------
 
-%log1(Data, Str, Args) -> log(Data, Str, Args, 1).
+log1(Data, Str, Args) -> log(Data, Str, Args, 1).
 log2(Data, Str, Args) -> log(Data, Str, Args, 2).
 
 log(Data, Str, Args, Level) when is_function(Data#eldap.log) ->
