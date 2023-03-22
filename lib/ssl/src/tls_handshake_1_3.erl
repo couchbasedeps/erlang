@@ -1215,7 +1215,8 @@ maybe_append_change_cipher_spec(#state{
                                    session = #session{session_id = Id},
                                     handshake_env =
                                         #handshake_env{
-                                           change_cipher_spec_sent = false} = HSEnv} = State, Bin) when Id =/= ?EMPTY_ID  ->
+                                           change_cipher_spec_sent = false} = HSEnv} = State, Bin)
+  when Id =/= ?EMPTY_ID orelse (State#state.static_env)#static_env.role == server ->
     CCSBin = create_change_cipher_spec(State),
     {State#state{handshake_env =
                      HSEnv#handshake_env{change_cipher_spec_sent = true}},
