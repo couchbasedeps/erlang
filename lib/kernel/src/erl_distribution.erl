@@ -41,7 +41,7 @@ start(Opts) ->
           start => {?MODULE,start_link,[Opts#{clean_halt => false,
                                               supervisor => net_sup_dynamic}]},
           restart => permanent,
-          shutdown => 1000,
+          shutdown => 60000,
           type => supervisor,
           modules => [erl_distribution]},
     supervisor:start_child(kernel_sup, C).
