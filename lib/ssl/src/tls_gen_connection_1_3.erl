@@ -294,7 +294,9 @@ maybe_append_change_cipher_spec(#state{
                                        #handshake_env{
                                           change_cipher_spec_sent = false}
                                    = HSEnv}
-                                = State, Bin) when Id =/= ?EMPTY_ID  ->
+                                = State, Bin)
+  when Id =/= ?EMPTY_ID orelse
+       (State#state.static_env)#static_env.role == server   ->
     CCSBin = tls_handshake_1_3:create_change_cipher_spec(State),
     {State#state{handshake_env =
                      HSEnv#handshake_env{change_cipher_spec_sent = true}},
