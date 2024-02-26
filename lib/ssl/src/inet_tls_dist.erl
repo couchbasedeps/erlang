@@ -635,19 +635,27 @@ do_setup(
     Timer = trace(dist_util:start_timer(SetupTime)),
     ParseAddress = fun (A) -> inet:parse_strict_address(A, Family) end,
     {#net_address{
-        host = _Host,
+        host = Host,
         address = {Ip, PortNum}},
      ConnectOptions,
      Version} =
         trace(inet_tcp_dist:fam_setup(
                 Family, Node, LongOrShortNames, ParseAddress)),
+    %% Ensure Host is a name (vs an IP address) before specifying server
+    %% name indication.
+    MaybeOpts = case inet:parse_address(Host) of
+                    {ok, _} ->
+                        [];
+                    _ ->
+                        [{server_name_indication, Host}]
+                end,
     Opts =
         inet_tcp_dist:merge_options(
           inet_tcp_dist:merge_options(
             ConnectOptions,
             get_ssl_options(client)),
           [Family, binary, {active, false}, {packet, 4}, {nodelay, true}],
-          []),
+          MaybeOpts),
     KTLS = proplists:get_value(ktls, Opts, false),
     dist_util:reset_timer(Timer),
     maybe
