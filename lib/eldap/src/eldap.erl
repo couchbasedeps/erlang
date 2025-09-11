@@ -396,6 +396,10 @@ simple_bind(Handle, Dn, Passwd, Controls) when is_pid(Handle)  ->
     send(Handle, {simple_bind, Dn, Passwd, Controls}),
     recv(Handle).
 
+-spec sasl_external_bind(Handle) -> ok | {ok, Refs} | {error, Reason} when
+    Handle :: handle(),
+    Refs :: {referral, referrals()},
+    Reason :: term().
 sasl_external_bind(Handle) ->
     send(Handle, {sasl_external_bind, asn1_NOVALUE}),
     recv(Handle).
